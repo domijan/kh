@@ -1,3 +1,13 @@
+#' Remove a link from a neighbourhood list by index numbers
+#'
+#' @param cont A neighbourhood list of class "nb"
+#' @param x Index number of one spatial unit to disconnect
+#' @param y Index number of other spatial unit to disconnect
+#'
+#' @return A neighbourhood list of class "nb" with selected units disconnected
+#' @export
+#'
+#' @examples
 manual_unlink_numeric <- function(cont,x,y)
 {
   class(cont) <- "list"

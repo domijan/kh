@@ -1,3 +1,13 @@
+#' Remove a link from a neighbourhood list by name
+#'
+#' @param cont A neighbourhood list of class "nb"
+#' @param x Name of one spatial unit to disconnect
+#' @param y Name of other spatial unit to disconnect
+#'
+#' @return A neighbourhood list of class "nb" with selected units disconnected
+#' @export
+#'
+#' @examples
 manual_unlink_name <- function(cont,x,y)
 {
   class(cont) <- "list"
