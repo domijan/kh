@@ -6,7 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of kh is to …
+The goal of kh is to make it easier to fit spatial models which deal
+with contiguity.
 
 ## Installation
 
@@ -17,6 +18,8 @@ You can install the development version of `kh` from
 # install.packages("devtools")
 devtools::install_github("horankev/kh")
 ```
+
+For this example, we load some spatial data from these sources:
 
 ``` r
 # required packages
