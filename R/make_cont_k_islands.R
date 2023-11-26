@@ -5,14 +5,14 @@ make_cont_k_islands <- function(data, # sf dataframe
 
   unit1 <- deparse(substitute(unit))
 
-  data1 <- data |> group_by(unit1) |> dplyr::summarise()
+  data1 <- data |> dplyr::group_by(unit1) |> dplyr::summarise()
 
   # link_islands_k
 
   if (link_islands_k > 0)
   {
     # unconnected units
-    cont <-  data1 %>%
+    cont <-  data1 |>
       sf::st_intersects()
     still_unconnected <- lengths(lapply(cont, function(lst) lst))
     unconnected <- which(still_unconnected == 1)
@@ -34,9 +34,9 @@ make_cont_k_islands <- function(data, # sf dataframe
       bufs[distdf[i,1]] <- distdf[i,2]
     }
 
-    cont <- data1 %>%
-      sf::st_buffer(dist=bufs) %>%
-      sf::st_intersects() %>%
+    cont <- data1 |>
+      sf::st_buffer(dist=bufs) |>
+      sf::st_intersects() |>
       purrr::imap(~setdiff(.x,.y))
 
     names(cont) <- data1 |> dplyr::pull(unit1)
@@ -49,8 +49,8 @@ make_cont_k_islands <- function(data, # sf dataframe
   # otherwise, just return unaltered contiguity structure
   if(link_islands_k <= 0)
   {
-    cont <- data1 %>%
-      sf::st_intersects() %>%
+    cont <- data1 |>
+      sf::st_intersects() |>
       purrr::imap(~setdiff(.x,.y))
 
     names(cont) <- data1 |> dplyr::pull(unit1)
