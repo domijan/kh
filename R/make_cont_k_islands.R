@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param data A simple features dataframe
+#' @param unit The level (e.g. region, county) at which the neighbourhood structure operates
+#' @param link_islands_k An integer value. The closest k units to isolated units will be represented as neighbours
+#'
+#' @return A neighbourhood list of class "nb"
+#' @export
+#'
+#' @examples
 make_cont_k_islands <- function(data, # sf dataframe
                                 unit, # neighbour areal unit
                                 link_islands_k = 0) # link island to k nearest units, 0 removes all islands

@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param cont A neighbourhood list of class "nb"
+#' @param data A simple features dataframe
+#' @param unit The level (e.g. region, county) at which the neighbourhood structure operates
+#'
+#' @return A map for visualising and checking of contiguities
+#' @export
+#'
+#' @examples
 makemap <- function(cont, data, unit){
   # to show the contiguities on a map
   unit1 <- deparse(substitute(unit))

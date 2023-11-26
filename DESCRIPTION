@@ -17,3 +17,4 @@ Imports:
     purrr,
     sf,
     spdep
+RoxygenNote: 7.2.3
