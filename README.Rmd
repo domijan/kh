@@ -33,7 +33,7 @@ devtools::install_github("horankev/kh")
 
 For this example, we load some spatial data from these sources:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # required packages
 packages <- c(
   "rnaturalearth",
