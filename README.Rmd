@@ -16,11 +16,18 @@ knitr::opts_chunk$set(
 # kh package
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-The goal of kh is to make it easier to fit spatial models which deal with contiguity.
+The goal of `kh` is to make it easier to fit spatial models which deal with contiguity.
 
-The functions described below deal with the initial set-up of such a model where a neighbourhood list must be created.
+It aims to do this with a collection of pre and post-processing tools.
+
+Two packages which are commonly used to fit such models are `mgcv` and `brms`.
+
+The pre-processing tools take an `sf` spatial object and generate a contiguity structure in the form which is required by the modelling package.
+
+The post-processing tools then extract the results of the model into a tidy `sf` format so they can easily be mapped.
 
 ## Installation
 
@@ -55,7 +62,21 @@ invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
 
 ## Example
 
-Often when preparing areal spatial data, the presence of uncontiguous areas (such as islands or exclaves) can create difficulties. These functions help to make the process of generating spatial structures less complicated.
+### Pre-processing functions
+
+The following functions are useful for preparing an `sf` object for use with `mgcv`:
+
+| Function                | Purpose                                                                                                              |
+|-------------------------|----------------------------------------------------------------------------------------------------------------------|
+| make_cont_k_islands()   | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
+| find_neighbours()       | outputs the names of any unit's neighbours within the contiguity object                                              |
+| manual_link_name()      | link two units (by name) as neighbours which are not already neighbours                                              |
+| manual_unlink_name()    | unlink two units (by name) which are currently neighbours                                                            |
+| manual_link_numeric()   | link two units (by index number) as neighbours which are not already neighbours                                      |
+| manual_unlink_numeric() | unlink two units (by index number) which are currently neighbours                                                    |
+| makemap()               | generates a quick-reference contiguity map of a contiguity object                                                    |
+
+: Often when preparing areal spatial data, the presence of uncontiguous areas (such as islands or exclaves) can create difficulties. These functions help to make the process of generating spatial structures less complicated.
 
 ```{r example}
 library(kh)
@@ -240,8 +261,3 @@ uk_admins |>
 )
 
 ```
-
-
-
-
-
