@@ -288,6 +288,8 @@ The function `get_output` takes a fitted `mgcv::gam` model and returns
 the estimates for the smooths and fixed effects, attached to an
 appropriate (spatial) dataframe.
 
+First use the pre-functions:
+
 ``` r
 
 nb_england <- uk_admins |> 
@@ -302,6 +304,11 @@ df_england <- uk_admins |>
   mutate(constituency_name = factor(constituency_name),
          region = factor(region),
          county = factor(county))
+```
+
+Then fit the `gam` model with various smooths:
+
+``` r
 
 model <- gam(con_17 ~ 
                born_england + 
@@ -313,6 +320,11 @@ model <- gam(con_17 ~
                s(constituency_name, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
                s(constituency_name, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
              data=df_england, method="REML")
+```
+
+Then use the post-functions to generate output:
+
+``` r
 
 output <- get_output(model, df_england)
 head(output[,1:10])
@@ -349,6 +361,17 @@ head(output[,1:10])
 #> 4        2.264675 MULTIPOLYGON (((444868.5 35...
 #> 5        2.513013 MULTIPOLYGON (((506643.3 12...
 #> 6        2.596432 MULTIPOLYGON (((449576.1 36...
-
-# quickmap_smooths(output)
 ```
+
+And a list containing plots of the smooths:
+
+``` r
+
+plot_list <- quickmap_smooths(output)
+ggarrange(plotlist = plot_list, 
+          legend = "none", 
+          ncol = 3,
+          nrow = 2)
+```
+
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />

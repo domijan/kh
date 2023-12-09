@@ -267,6 +267,8 @@ uk_admins |>
 
 The function `get_output` takes a fitted `mgcv::gam` model and returns the estimates for the smooths and fixed effects, attached to an appropriate (spatial) dataframe.
 
+First use the pre-functions:
+
 ```{r, warning=FALSE, message=FALSE}
 
 nb_england <- uk_admins |> 
@@ -282,6 +284,12 @@ df_england <- uk_admins |>
          region = factor(region),
          county = factor(county))
 
+```
+
+Then fit the `gam` model with various smooths: 
+
+```{r, warning=FALSE, message=FALSE}
+
 model <- gam(con_17 ~ 
                born_england + 
                deprived_1 + 
@@ -293,10 +301,26 @@ model <- gam(con_17 ~
                s(constituency_name, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
              data=df_england, method="REML")
 
+```
+
+Then use the post-functions to generate output:
+
+```{r, warning=FALSE, message=FALSE}
+
 output <- get_output(model, df_england)
 head(output[,1:10])
 
-# quickmap_smooths(output)
+```
+
+And a list containing plots of the smooths:
+
+```{r, warning=FALSE, message=FALSE, fig.width=10}
+
+plot_list <- quickmap_smooths(output)
+ggarrange(plotlist = plot_list, 
+          legend = "none", 
+          ncol = 3,
+          nrow = 2)
 
 ```
 
