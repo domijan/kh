@@ -8,7 +8,7 @@
 #' @examples
 quickmap_smooths <- function(output){
   output1 <- output |>
-    dplyr::select(dplyr::starts_with("smooth_"))
+    dplyr::select(starts_with("smooth_"))
 
   fillnames <- output1 |>
     sf::st_drop_geometry() |>
