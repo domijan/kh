@@ -26,5 +26,8 @@ quickmap_smooths <- function(output){
       ggplot2::theme(plot.subtitle = ggplot2::element_text(size=8))
 
   }
-  return(print(ggpubr::ggarrange(plotlist = plot_list, legend = "none", ncol = 3, nrow = round(length(plot_list)/3 +0.3))))
+  return(print(ggpubr::ggarrange(plotlist = plot_list,
+                                 ggpubr::legend = "none",
+                                 ggpubr::ncol = 3,
+                                 ggpubr::nrow = round(length(plot_list)/3 +0.3))))
 }
