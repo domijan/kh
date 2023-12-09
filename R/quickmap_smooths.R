@@ -15,8 +15,8 @@ quickmap_smooths <- function(output){
     names()
   plot_list <- list()
   for (i in 1:length(fillnames)){
-    plot_list[[i]] <- ggplot2::ggplot(output1) +
-      ggplot2::geom_sf(ggplot2::aes(fill=!!as.name(fillnames[i])), linewidth=0.05, colour="black") +
+    plot_list[[i]] <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data=output1, ggplot2::aes(fill=!!as.name(fillnames[i])), linewidth=0.05, colour="black") +
       ggplot2::scale_fill_gradient2() +
       ggplot2::labs(title="smooth",
            subtitle=stringr::str_remove(fillnames[i],"smooth_")) +
