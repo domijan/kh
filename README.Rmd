@@ -47,7 +47,8 @@ packages <- c(
   "sf",
   "tidyverse",
   "parlitools",
-  "ggpubr"
+  "ggpubr",
+  "mgcv"
   )
 
 # Install packages not yet installed
@@ -67,7 +68,7 @@ invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
 The following functions are useful for preparing an `sf` object for use with `mgcv`:
 
 | Function                | Purpose                                                                                                              |
-|-------------------------|----------------------------------------------------------------------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | make_cont_k_islands()   | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | find_neighbours()       | outputs the names of any unit's neighbours within the contiguity object                                              |
 | manual_link_name()      | link two units (by name) as neighbours which are not already neighbours                                              |
@@ -261,3 +262,42 @@ uk_admins |>
 )
 
 ```
+
+### Post-processing functions
+
+The function `get_output` takes a fitted `mgcv::gam` model and returns the estimates for the smooths and fixed effects, attached to an appropriate (spatial) dataframe.
+
+```{r, warning=FALSE, message=FALSE}
+
+nb_england <- uk_admins |> 
+  filter(country %in% "England") |> 
+  make_cont_k_islands(unit = constituency_name,
+                    link_islands_k = 3) |> 
+  manual_unlink_name("Isle Of Wight","New Forest East") |> 
+  manual_unlink_name("Isle Of Wight","New Forest West")
+  
+df_england <- uk_admins |> 
+  filter(country %in% "England") |> 
+  mutate(constituency_name = factor(constituency_name),
+         region = factor(region),
+         county = factor(county))
+
+model <- gam(con_17 ~ 
+               born_england + 
+               deprived_1 + 
+               degree + 
+               s(region, bs="re") +
+               s(county, bs="re") +
+               s(constituency_name, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency_name, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency_name, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
+             data=df_england, method="REML")
+
+output <- get_output(model, df_england)
+head(output[,1:10])
+
+# quickmap_smooths(output)
+
+```
+
+

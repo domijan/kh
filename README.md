@@ -40,7 +40,8 @@ packages <- c(
   "sf",
   "tidyverse",
   "parlitools",
-  "ggpubr"
+  "ggpubr",
+  "mgcv"
   )
 
 # Install packages not yet installed
@@ -279,4 +280,75 @@ uk_admins |>
 "Isle Of Wight"
 )
 #> [1] "Gosport"
+```
+
+### Post-processing functions
+
+The function `get_output` takes a fitted `mgcv::gam` model and returns
+the estimates for the smooths and fixed effects, attached to an
+appropriate (spatial) dataframe.
+
+``` r
+
+nb_england <- uk_admins |> 
+  filter(country %in% "England") |> 
+  make_cont_k_islands(unit = constituency_name,
+                    link_islands_k = 3) |> 
+  manual_unlink_name("Isle Of Wight","New Forest East") |> 
+  manual_unlink_name("Isle Of Wight","New Forest West")
+  
+df_england <- uk_admins |> 
+  filter(country %in% "England") |> 
+  mutate(constituency_name = factor(constituency_name),
+         region = factor(region),
+         county = factor(county))
+
+model <- gam(con_17 ~ 
+               born_england + 
+               deprived_1 + 
+               degree + 
+               s(region, bs="re") +
+               s(county, bs="re") +
+               s(constituency_name, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency_name, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency_name, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
+             data=df_england, method="REML")
+
+output <- get_output(model, df_england)
+head(output[,1:10])
+#> Simple feature collection with 6 features and 10 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 368282 ymin: 101579.6 xmax: 532401.3 ymax: 393553.9
+#> Projected CRS: OSGB36 / British National Grid
+#>   smooth_region smooth_county smooth_constituency_name.born_england
+#> 1  6.073839e-04      1.706711                            0.14626343
+#> 2 -5.774813e-05     -2.703870                            0.01976628
+#> 3 -4.414490e-04     -1.505832                           -0.14059956
+#> 4  2.417885e-05      1.090575                           -0.02753703
+#> 5  6.073839e-04      2.668064                            0.07881616
+#> 6  2.417885e-05     -2.382387                           -0.03074957
+#>   smooth_constituency_name.deprived_1 smooth_constituency_name.degree
+#> 1                           0.8686497                      0.07696118
+#> 2                           0.5955433                      0.63881553
+#> 3                           0.3872410                      0.69905686
+#> 4                           0.5640869                      0.43623841
+#> 5                           0.7893368                     -0.21499099
+#> 6                           0.5640568                      0.40074433
+#>   fixed_born_england fixed_deprived_1 fixed_degree smoothse_region
+#> 1            1.25084                0            0      0.03766500
+#> 2            1.25084                0            0      0.03766566
+#> 3            1.25084                0            0      0.03766621
+#> 4            1.25084                0            0      0.03766501
+#> 5            1.25084                0            0      0.03766500
+#> 6            1.25084                0            0      0.03766501
+#>   smoothse_county                       geometry
+#> 1        2.508186 MULTIPOLYGON (((485408.1 15...
+#> 2        2.365326 MULTIPOLYGON (((406519.5 30...
+#> 3        2.358090 MULTIPOLYGON (((379104.1 39...
+#> 4        2.264675 MULTIPOLYGON (((444868.5 35...
+#> 5        2.513013 MULTIPOLYGON (((506643.3 12...
+#> 6        2.596432 MULTIPOLYGON (((449576.1 36...
+
+# quickmap_smooths(output)
 ```
