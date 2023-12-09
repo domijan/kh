@@ -1,9 +1,9 @@
 #' Title
 #'
-#' @param model The output of an mgcv::gam() model
-#' @param dataframe sf dataframe to which the output will be attached
+#' @param model The output of an `mgcv::gam()` model
+#' @param dataframe `sf` dataframe to which the output will be attached
 #'
-#' @return A sf dataframe with the smooth and fixed outputs of the model as the initial columns
+#' @return `sf` dataframe with the smooth and fixed outputs of the model as the initial columns
 #' @export
 #'
 #' @examples

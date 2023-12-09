@@ -7,12 +7,12 @@
 get_output(model, dataframe)
 }
 \arguments{
-\item{model}{The output of an mgcv::gam() model}
+\item{model}{The output of an `mgcv::gam()` model}
 
-\item{dataframe}{sf dataframe to which the output will be attached}
+\item{dataframe}{`sf` dataframe to which the output will be attached}
 }
 \value{
-A sf dataframe with the smooth and fixed outputs of the model as the initial columns
+`sf` dataframe with the smooth and fixed outputs of the model as the initial columns
 }
 \description{
 Title
