@@ -10,7 +10,7 @@ quickmap_smooths(output)
 \item{output}{the `sf` dataframe output of `get_output()`}
 }
 \value{
-quick maps of all smooths
+a list containing quick maps of all smooths
 }
 \description{
 Title
