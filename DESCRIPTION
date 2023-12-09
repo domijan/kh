@@ -17,5 +17,6 @@ Imports:
     purrr,
     sf,
     spdep,
-    stringr
+    stringr,
+    ggpubr
 RoxygenNote: 7.2.3

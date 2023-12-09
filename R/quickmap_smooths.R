@@ -27,7 +27,7 @@ quickmap_smooths <- function(output){
 
   }
   return(print(ggpubr::ggarrange(plotlist = plot_list,
-                                 ggpubr::legend = "none",
-                                 ggpubr::ncol = 3,
-                                 ggpubr::nrow = round(length(plot_list)/3 +0.3))))
+                                 legend = "none",
+                                 ncol = 3,
+                                 nrow = round(length(plot_list)/3 +0.3))))
 }
