@@ -16,5 +16,6 @@ Imports:
     magrittr,
     purrr,
     sf,
-    spdep
+    spdep,
+    stringr
 RoxygenNote: 7.2.3
