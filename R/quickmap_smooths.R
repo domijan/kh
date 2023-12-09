@@ -22,7 +22,8 @@ quickmap_smooths <- function(output){
            subtitle=stringr::str_remove(fillnames[i],"smooth_")) +
       ggplot2::coord_sf(datum=NA) +
       ggplot2::theme_minimal() +
-      ggplot2::theme_bw()
+      ggplot2::theme_bw() +
+      ggplot2::theme(plot.subtitle = ggplot2::element_text(size=8))
 
   }
   print(ggpubr::ggarrange(plotlist = plot_list, legend = "none", ncol = 3, nrow = round(length(plot_list)/3 +0.3)))
