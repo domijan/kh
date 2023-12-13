@@ -327,6 +327,12 @@ Then use the post-functions to generate output:
 ``` r
 
 output <- get_output(model, df_england)
+```
+
+The output looks like this:
+
+``` r
+
 head(output[,1:10])
 #> Simple feature collection with 6 features and 10 fields
 #> Geometry type: MULTIPOLYGON
@@ -374,4 +380,4 @@ ggarrange(plotlist = plot_list,
           nrow = 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />
