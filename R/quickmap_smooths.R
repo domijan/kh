@@ -30,7 +30,7 @@ quickmap_smooths <- function(output){
       ggplot2::coord_sf(datum=NA) +
       ggplot2::theme_minimal() +
       ggplot2::theme_bw() +
-      ggplot2::theme(plot.subtitle = ggplot2::element_text(size=8))
+      ggplot2::theme(plot.subtitle = ggplot2::element_text(size=10))
 
   }
 
