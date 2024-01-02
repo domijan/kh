@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-make_cont_k_islands <- function(data, # sf dataframe
+make_contigs <- function(data, # sf dataframe
                                 unit, # neighbour areal unit
                                 link_islands_k = 0) # link island to k nearest units, 0 removes all islands
 {
