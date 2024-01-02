@@ -15,18 +15,19 @@ get_output <- function(model,dataframe){
   output <- predict(model, dataframe, type = "terms", se.fit = TRUE) |>
     as.data.frame()
 
+  # change names from fit. to the type of effect (random effect or mrf.smooth)
   names(output)[stringr::str_starts(names(output),"fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
-                                                                   "fit.s.",
-                                                                   paste0(summary(model$smooth)[,2],"."))
-
+                                                                                     "fit.s.",
+                                                                                     paste0(summary(model$smooth)[,2],"."))
+  # same for standard error columns
   names(output)[stringr::str_starts(names(output),"se.fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"se.fit.s.")],
-                                                                      "se.fit.s.",
-                                                                      paste0("se.",summary(model$smooth)[,2],"."))
+                                                                                        "se.fit.s.",
+                                                                                        paste0("se.",summary(model$smooth)[,2],"."))
 
   # remove the . at the end of each matching string
   names(output) <- stringr::str_remove_all(names(output), "\\.$")
 
-  # remove the .. at the end of each matching string
+  # swap around and put a | in the mrf smooths
   names(output) <- stringr::str_replace_all(names(output), "\\.{2}", "|")
 
   output <- output |>
@@ -37,36 +38,4 @@ get_output <- function(model,dataframe){
 
   return(output)
 
-
-  # tempdf <- dataframe |>
-  #   mutate_if(is.numeric, funs(replace(., TRUE, 1)))
-  #
-  # output <- predict(model, tempdf, type = "terms", se.fit = TRUE) |>
-  #   as.data.frame()
-  #
-  # names(output) <- stringr::str_replace_all(names(output),
-  #                                  "^fit.s.",
-  #                                  "smooth_")
-  # names(output) <- stringr::str_replace_all(names(output),
-  #                                  "^se.fit.s.",
-  #                                  "smoothse_")
-  # names(output) <- stringr::str_replace_all(names(output),
-  #                                  "^fit.",
-  #                                  "fixed_")
-  # names(output) <- stringr::str_replace_all(names(output),
-  #                                  "^se.fit.",
-  #                                  "fixedse_")
-  # # Define a pattern to match strings starting with "smooth" and ending with .
-  # pattern <- "(smooth[^,]*)\\."
-  #
-  # # remove the . at the end of each matching string
-  # names(output) <- stringr::str_replace_all(names(output), pattern, "\\1")
-  #
-  # output <- output |>
-  #   dplyr::select(starts_with("smooth_"),starts_with("fixed_"),starts_with("smoothse_"),starts_with("fixedse_"),everything()) |>
-  #   cbind(dataframe) |>
-  #   as.data.frame() |>
-  #   sf::st_as_sf()
-  #
-  # return(output)
 }
