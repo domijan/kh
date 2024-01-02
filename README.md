@@ -174,6 +174,7 @@ uk_admins <- elect_results |>
          county = factor(county),
          constituency_name = factor(constituency_name),
          geometry = geometry) |> 
+  rename(constituency = constituency_name) |> 
   st_as_sf()
 ```
 
@@ -193,9 +194,9 @@ uk_admins |>
   makemap(uk_admins, county),
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency_name,
+  make_cont_k_islands(unit = constituency,
                     link_islands_k = 1) |> 
-  makemap(uk_admins, constituency_name),
+  makemap(uk_admins, constituency),
 
 ncol=3
 )
@@ -246,9 +247,9 @@ In the following example, we link island constituencies to their nearest
 ``` r
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency_name,
+  make_cont_k_islands(unit = constituency,
                     link_islands_k = 3) |> 
-  makemap(uk_admins, constituency_name)
+  makemap(uk_admins, constituency)
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
@@ -260,7 +261,7 @@ Using the `find_neighbours` function…
 
 find_neighbours(
   uk_admins |> 
-  make_cont_k_islands(unit = constituency_name,
+  make_cont_k_islands(unit = constituency,
                     link_islands_k = 3),
   "Isle Of Wight"
 )
@@ -273,7 +274,7 @@ I only wanted Gosport. So I will remove the other two…
 
 find_neighbours(
 uk_admins |> 
-  make_cont_k_islands(unit = constituency_name,
+  make_cont_k_islands(unit = constituency,
                     link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
   manual_unlink_name("Isle Of Wight","New Forest West"),
@@ -294,14 +295,14 @@ First use the pre-functions:
 
 nb_england <- uk_admins |> 
   filter(country %in% "England") |> 
-  make_cont_k_islands(unit = constituency_name,
+  make_cont_k_islands(unit = constituency,
                     link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
   manual_unlink_name("Isle Of Wight","New Forest West")
   
 df_england <- uk_admins |> 
   filter(country %in% "England") |> 
-  mutate(constituency_name = factor(constituency_name),
+  mutate(constituency = factor(constituency),
          region = factor(region),
          county = factor(county))
 ```
@@ -316,9 +317,9 @@ model <- gam(con_17 ~
                degree + 
                s(region, bs="re") +
                s(county, bs="re") +
-               s(constituency_name, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency_name, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency_name, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
+               s(constituency, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
              data=df_england, method="REML")
 ```
 
@@ -339,34 +340,48 @@ head(output[,1:10])
 #> Dimension:     XY
 #> Bounding box:  xmin: 368282 ymin: 101579.6 xmax: 532401.3 ymax: 393553.9
 #> Projected CRS: OSGB36 / British National Grid
-#>   smooth_region smooth_county smooth_constituency_name.born_england
-#> 1  6.073839e-04      1.706711                            0.14626343
-#> 2 -5.774813e-05     -2.703870                            0.01976628
-#> 3 -4.414490e-04     -1.505832                           -0.14059956
-#> 4  2.417885e-05      1.090575                           -0.02753703
-#> 5  6.073839e-04      2.668064                            0.07881616
-#> 6  2.417885e-05     -2.382387                           -0.03074957
-#>   smooth_constituency_name.deprived_1 smooth_constituency_name.degree
-#> 1                           0.8686497                      0.07696118
-#> 2                           0.5955433                      0.63881553
-#> 3                           0.3872410                      0.69905686
-#> 4                           0.5640869                      0.43623841
-#> 5                           0.7893368                     -0.21499099
-#> 6                           0.5640568                      0.40074433
-#>   fixed_born_england fixed_deprived_1 fixed_degree smoothse_region
-#> 1            1.25084                0            0      0.03766500
-#> 2            1.25084                0            0      0.03766566
-#> 3            1.25084                0            0      0.03766621
-#> 4            1.25084                0            0      0.03766501
-#> 5            1.25084                0            0      0.03766500
-#> 6            1.25084                0            0      0.03766501
-#>   smoothse_county                       geometry
-#> 1        2.508186 MULTIPOLYGON (((485408.1 15...
-#> 2        2.365326 MULTIPOLYGON (((406519.5 30...
-#> 3        2.358090 MULTIPOLYGON (((379104.1 39...
-#> 4        2.264675 MULTIPOLYGON (((444868.5 35...
-#> 5        2.513013 MULTIPOLYGON (((506643.3 12...
-#> 6        2.596432 MULTIPOLYGON (((449576.1 36...
+#>   random.effect.region random.effect.county
+#> 1         6.073839e-04             1.706711
+#> 2        -5.774813e-05            -2.703870
+#> 3        -4.414490e-04            -1.505832
+#> 4         2.417885e-05             1.090575
+#> 5         6.073839e-04             2.668064
+#> 6         2.417885e-05            -2.382387
+#>   mrf.smooth.constituency|born_england mrf.smooth.constituency|deprived_1
+#> 1                            11.629070                           28.52421
+#> 2                             1.872756                           19.69007
+#> 3                           -12.234466                           11.23745
+#> 4                            -2.637204                           17.71635
+#> 5                             7.127869                           25.82921
+#> 6                            -2.938126                           18.32714
+#>   mrf.smooth.constituency|degree se.random.effect.region
+#> 1                       1.067502              0.03766500
+#> 2                       6.371619              0.03766566
+#> 3                      19.993120              0.03766621
+#> 4                       4.072850              0.03766501
+#> 5                      -4.036583              0.03766500
+#> 6                       2.438712              0.03766501
+#>   se.random.effect.county se.mrf.smooth.constituency|born_england
+#> 1                2.508186                                3.901682
+#> 2                2.365326                                3.417439
+#> 3                2.358090                                4.065510
+#> 4                2.264675                                3.712115
+#> 5                2.513013                                5.573187
+#> 6                2.596432                                4.025844
+#>   se.mrf.smooth.constituency|deprived_1 se.mrf.smooth.constituency|degree
+#> 1                              11.64201                          2.738666
+#> 2                              11.78601                          1.792209
+#> 3                              10.57810                          4.511394
+#> 4                              11.17196                          1.572283
+#> 5                              11.84416                          3.871403
+#> 6                              11.61155                          1.121780
+#>                         geometry
+#> 1 MULTIPOLYGON (((485408.1 15...
+#> 2 MULTIPOLYGON (((406519.5 30...
+#> 3 MULTIPOLYGON (((379104.1 39...
+#> 4 MULTIPOLYGON (((444868.5 35...
+#> 5 MULTIPOLYGON (((506643.3 12...
+#> 6 MULTIPOLYGON (((449576.1 36...
 ```
 
 And a list containing plots of the smooths:
