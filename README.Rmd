@@ -330,9 +330,9 @@ model <- gam(con_17 ~
 
 ```
 
-#### tidy_estimates()
-
 Then use the post-functions to generate output:
+
+#### tidy_estimates()
 
 ```{r, warning=FALSE, message=FALSE}
 

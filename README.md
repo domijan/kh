@@ -358,9 +358,9 @@ model <- gam(con_17 ~
              data=df_england, method="REML")
 ```
 
-#### tidy_estimates()
-
 Then use the post-functions to generate output:
+
+#### tidy_estimates()
 
 ``` r
 
