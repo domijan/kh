@@ -32,10 +32,10 @@ Two packages which are commonly used to fit such models are `mgcv` and
 3.  The *post-processing tools* then extract the results of the model
     into a tidy `sf` format so they can easily be mapped.
 
-| Function     | Purpose               |
-|--------------|-----------------------|
-| get_output() | **TIDY RESULTS**      |
-| quickmap()   | **VISUALISE RESULTS** |
+| Function         | Purpose               |
+|------------------|-----------------------|
+| tidy_estimates() | **TIDY RESULTS**      |
+| quickmap()       | **VISUALISE RESULTS** |
 
 ## Installation
 
@@ -313,14 +313,14 @@ uk_admins |>
 
 ### Post-processing functions
 
-| Function     | Purpose               |
-|--------------|-----------------------|
-| get_output() | **TIDY RESULTS**      |
-| quickmap()   | **VISUALISE RESULTS** |
+| Function         | Purpose               |
+|------------------|-----------------------|
+| tidy_estimates() | **TIDY RESULTS**      |
+| quickmap()       | **VISUALISE RESULTS** |
 
-The function `get_output` takes a fitted `mgcv::gam` model and returns
-computed estimates and standard errors for any random effects and/or
-Markov random field spatial smoothing components, attached to an
+The function `tidy_estimates` takes a fitted `mgcv::gam` model and
+returns computed estimates and standard errors for any random effects
+and/or Markov random field spatial smoothing components, attached to an
 appropriate (spatial) dataframe.
 
 First use the pre-functions:
@@ -358,13 +358,13 @@ model <- gam(con_17 ~
              data=df_england, method="REML")
 ```
 
-#### get_output()
+#### tidy_estimates()
 
 Then use the post-functions to generate output:
 
 ``` r
 
-output <- get_output(model, df_england)
+output <- tidy_estimates(model, df_england)
 ```
 
 The output shown below displays the estimates and standard errors of

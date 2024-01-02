@@ -42,7 +42,7 @@ Two packages which are commonly used to fit such models are `mgcv` and `brms`.
 
 | Function     | Purpose               |
 |--------------|-----------------------|
-| get_output() | **TIDY RESULTS**      |
+| tidy_estimates() | **TIDY RESULTS**      |
 | quickmap()   | **VISUALISE RESULTS** |
 
 ## Installation
@@ -289,10 +289,10 @@ uk_admins |>
 
 | Function     | Purpose               |
 |--------------|-----------------------|
-| get_output() | **TIDY RESULTS**      |
+| tidy_estimates() | **TIDY RESULTS**      |
 | quickmap()   | **VISUALISE RESULTS** |
 
-The function `get_output` takes a fitted `mgcv::gam` model and returns computed estimates and standard errors for any random effects and/or Markov random field spatial smoothing components, attached to an appropriate (spatial) dataframe.
+The function `tidy_estimates` takes a fitted `mgcv::gam` model and returns computed estimates and standard errors for any random effects and/or Markov random field spatial smoothing components, attached to an appropriate (spatial) dataframe.
 
 First use the pre-functions:
 
@@ -330,13 +330,13 @@ model <- gam(con_17 ~
 
 ```
 
-#### get_output()
+#### tidy_estimates()
 
 Then use the post-functions to generate output:
 
 ```{r, warning=FALSE, message=FALSE}
 
-output <- get_output(model, df_england)
+output <- tidy_estimates(model, df_england)
 
 ```
 
