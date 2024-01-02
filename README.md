@@ -14,14 +14,28 @@ It aims to do this with a collection of pre- and post-processing tools.
 Two packages which are commonly used to fit such models are `mgcv` and
 `brms`.
 
-The package has *pre-processing tools* which take an `sf` spatial object
-and generate a contiguity structure in the form which is required by the
-modelling package.
+1.  This package has *pre-processing tools* which take an `sf` spatial
+    object and generate a contiguity structure in the form which is
+    required by the modelling package.
 
-The model can then be fit as normal within `mgcv` or `brms`.
+| Function                | Stage      | Purpose                                                                                                              |
+|-------------------------|------------|----------------------------------------------------------------------------------------------------------------------|
+| make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
+| quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
+| find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
+| manual_link_name()      | **EDIT**   | link two units (by name) as neighbours which are not already neighbours                                              |
+| manual_unlink_name()    | **EDIT**   | unlink two units (by name) which are currently neighbours                                                            |
+| manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
+| manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
-The *post-processing tools* then extract the results of the model into a
-tidy `sf` format so they can easily be mapped.
+2.  The model can then be fit as normal within `mgcv` or `brms`.
+3.  The *post-processing tools* then extract the results of the model
+    into a tidy `sf` format so they can easily be mapped.
+
+| Function     | Purpose               |
+|--------------|-----------------------|
+| get_output() | **TIDY RESULTS**      |
+| quickmap()   | **VISUALISE RESULTS** |
 
 ## Installation
 
@@ -242,7 +256,8 @@ make_contigs(data = uk_admins,
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 or `manual_unlink_name` to unlink units using their names. Here, we
-unlink the East and West Midlands, and also the North West and East:
+unlink the East and West Midlands, and also the North West and North
+East:
 
 ``` r
 
@@ -297,6 +312,11 @@ uk_admins |>
 ```
 
 ### Post-processing functions
+
+| Function     | Purpose               |
+|--------------|-----------------------|
+| get_output() | **TIDY RESULTS**      |
+| quickmap()   | **VISUALISE RESULTS** |
 
 The function `get_output` takes a fitted `mgcv::gam` model and returns
 computed estimates and standard errors for any random effects and/or
