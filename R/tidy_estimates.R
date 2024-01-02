@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-get_output <- function(model,dataframe){
+tidy_estimates <- function(model,dataframe){
 
   tempdf <-dataframe |>
     mutate(across(where(is.numeric), ~replace_na(., 1)))
