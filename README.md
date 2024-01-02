@@ -390,7 +390,7 @@ And a list containing plots of the smooths:
 
 plot_list <- quickmap_smooths(output)
 ggarrange(plotlist = plot_list, 
-          legend = "none", 
+          legend = "none",
           ncol = 3,
           nrow = 2)
 ```

@@ -322,11 +322,11 @@ head(output[,1:10])
 
 And a list containing plots of the smooths:
 
-```{r, warning=FALSE, message=FALSE, fig.width=10}
+```{r, warning=FALSE, message=FALSE, fig.width=8, fig.height=8}
 
 plot_list <- quickmap_smooths(output)
 ggarrange(plotlist = plot_list, 
-          legend = "none", 
+          legend = "none",
           ncol = 3,
           nrow = 2)
 
