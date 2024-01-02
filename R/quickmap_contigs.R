@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-makemap <- function(cont, data, unit){
+quickmap_contigs <- function(cont, data, unit){
   # to show the contiguities on a map
   unit1 <- deparse(substitute(unit))
 
