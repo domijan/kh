@@ -81,6 +81,10 @@ library(kh)
 ## basic example code
 ```
 
+#### make_cont_k_islands()
+
+#### makemap()
+
 The following is a map of the UK from the `rnaturalearth` package. It
 features many non-contiguous units. In the following example of
 `make_cont_k_islands`, the argument k is set to one. This means that in
@@ -204,6 +208,14 @@ ncol=3
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
+#### manual_link_name()
+
+#### manual_unlink_name()
+
+#### manual_link_numeric()
+
+#### manual_unlink_numeric()
+
 We can use `manual_link_name` to add additional contiguities using the
 name of the units. This can also be done using the number of the unit
 (which is provided in the neighbourhood list, rather than the names)
@@ -211,12 +223,10 @@ using `manual_link_numeric`. Here we link Northern Ireland to Cornwall:
 
 ``` r
 
-manual_link_name(
-  make_cont_k_islands(data = uk_admins,
-                      unit = county,
-                    link_islands_k = 1),
-  "Northern Ireland",
-  "Cornwall") |> 
+make_cont_k_islands(data = uk_admins,
+                    unit = county,
+                    link_islands_k = 1) |> 
+  manual_link_name("Northern Ireland","Cornwall") |> 
   makemap(uk_admins, county)
 ```
 
@@ -227,15 +237,11 @@ unlink the East and West Midlands, and also the North West and East:
 
 ``` r
 
-manual_unlink_name(
-  make_cont_k_islands(data = uk_admins,
-                      unit = region,
-                      link_islands_k = 1),
-  "East Midlands",
-  "West Midlands") |> 
-  manual_unlink_name(
-    "North West",
-    "North East") |> 
+make_cont_k_islands(data = uk_admins,
+                    unit = region,
+                    link_islands_k = 1) |> 
+  manual_unlink_name("East Midlands","West Midlands") |> 
+  manual_unlink_name("North West","North East") |> 
   makemap(uk_admins, region)
 ```
 
@@ -254,17 +260,17 @@ uk_admins |>
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
+#### find_neighbours()
+
 But which three constituencies have now been link to the Isle of Wight?
 Using the `find_neighbours` function…
 
 ``` r
 
-find_neighbours(
-  uk_admins |> 
+uk_admins |> 
   make_cont_k_islands(unit = constituency,
-                    link_islands_k = 3),
-  "Isle Of Wight"
-)
+                      link_islands_k = 3) |> 
+  find_neighbours("Isle Of Wight")
 #> [1] "Gosport"         "New Forest East" "New Forest West"
 ```
 
@@ -272,21 +278,20 @@ I only wanted Gosport. So I will remove the other two…
 
 ``` r
 
-find_neighbours(
 uk_admins |> 
   make_cont_k_islands(unit = constituency,
-                    link_islands_k = 3) |> 
+                      link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
-  manual_unlink_name("Isle Of Wight","New Forest West"),
-"Isle Of Wight"
-)
+  manual_unlink_name("Isle Of Wight","New Forest West") |> 
+  find_neighbours("Isle Of Wight")
 #> [1] "Gosport"
 ```
 
 ### Post-processing functions
 
 The function `get_output` takes a fitted `mgcv::gam` model and returns
-the estimates for the smooths and fixed effects, attached to an
+computed estimates and standard errors for any random effects and/or
+Markov random field spatial smoothing components, attached to an
 appropriate (spatial) dataframe.
 
 First use the pre-functions:
@@ -307,7 +312,8 @@ df_england <- uk_admins |>
          county = factor(county))
 ```
 
-Then fit the `gam` model with various smooths:
+Then fit a `gam` model with a combination of random effects and ICAR
+components:
 
 ``` r
 
@@ -323,6 +329,8 @@ model <- gam(con_17 ~
              data=df_england, method="REML")
 ```
 
+#### get_output()
+
 Then use the post-functions to generate output:
 
 ``` r
@@ -330,7 +338,9 @@ Then use the post-functions to generate output:
 output <- get_output(model, df_england)
 ```
 
-The output looks like this:
+The output shown below displays the estimates and standard errors of
+each component of the model for the first 5 constituencies
+alphabetically, as an `sf` dataframe which can be easily mapped:
 
 ``` r
 
@@ -384,7 +394,10 @@ head(output[,1:10])
 #> 6 MULTIPOLYGON (((449576.1 36...
 ```
 
-And a list containing plots of the smooths:
+#### quickmap_smooths()
+
+A list containing plots (maps, as they are spatial) of the components
+can be generated with this function:
 
 ``` r
 
