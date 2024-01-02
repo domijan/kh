@@ -6,19 +6,21 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `kh` is to make it easier to fit spatial models which deal
-with contiguity.
+The goal of `kh` is to make it easier to fit areal spatial models which
+deal with contiguity.
 
-It aims to do this with a collection of pre and post-processing tools.
+It aims to do this with a collection of pre- and post-processing tools.
 
 Two packages which are commonly used to fit such models are `mgcv` and
 `brms`.
 
-The pre-processing tools take an `sf` spatial object and generate a
-contiguity structure in the form which is required by the modelling
-package.
+The package has *pre-processing tools* which take an `sf` spatial object
+and generate a contiguity structure in the form which is required by the
+modelling package.
 
-The post-processing tools then extract the results of the model into a
+The model can then be fit as normal within `mgcv` or `brms`.
+
+The *post-processing tools* then extract the results of the model into a
 tidy `sf` format so they can easily be mapped.
 
 ## Installation
@@ -56,41 +58,48 @@ invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
 
 ## Example
 
+Often when preparing areal spatial data, the presence of uncontiguous
+areas (such as islands or exclaves) can create difficulties. We might
+also want to account for some hidden contiguities by allowing bridges,
+tunnels etc. to render two uncontiguous areas as neighbours. These
+*pre-processing* functions help to make the process of generating
+neighbourhood structures less complicated.
+
 ### Pre-processing functions
 
-The following functions are useful for preparing an `sf` object for use
-with `mgcv`:
+The following set of functions are useful for preparing a neighbourhood
+structure from an `sf` object for use with `mgcv`. They suggest three
+stages in this process: *creation*, *checking* and *editing*. The second
+and third can be looped as necessary. First *create* a contiguity list,
+then *check* a map of it to see if it looks appropriate. Functions for
+further manual *editing* can then be used until it looks as it should.
 
-| Function                | Purpose                                                                                                              |
-|-------------------------|----------------------------------------------------------------------------------------------------------------------|
-| make_cont_k_islands()   | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
-| find_neighbours()       | outputs the names of any unit’s neighbours within the contiguity object                                              |
-| manual_link_name()      | link two units (by name) as neighbours which are not already neighbours                                              |
-| manual_unlink_name()    | unlink two units (by name) which are currently neighbours                                                            |
-| manual_link_numeric()   | link two units (by index number) as neighbours which are not already neighbours                                      |
-| manual_unlink_numeric() | unlink two units (by index number) which are currently neighbours                                                    |
-| makemap()               | generates a quick-reference contiguity map of a contiguity object                                                    |
-
-Often when preparing areal spatial data, the presence of uncontiguous
-areas (such as islands or exclaves) can create difficulties. These
-functions help to make the process of generating spatial structures less
-complicated.
+| Function                | Stage      | Purpose                                                                                                              |
+|-------------------------|------------|----------------------------------------------------------------------------------------------------------------------|
+| make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
+| quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
+| find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
+| manual_link_name()      | **EDIT**   | link two units (by name) as neighbours which are not already neighbours                                              |
+| manual_unlink_name()    | **EDIT**   | unlink two units (by name) which are currently neighbours                                                            |
+| manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
+| manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
 ``` r
 library(kh)
 ## basic example code
 ```
 
-#### make_cont_k_islands()
+#### make_contigs()
 
-#### makemap()
+#### quickmap_contigs()
 
 The following is a map of the UK from the `rnaturalearth` package. It
 features many non-contiguous units. In the following example of
-`make_cont_k_islands`, the argument k is set to one. This means that in
+`make_contigs`, the argument k is set to one. This means that in
 addition to all of the normal contiguities, all islands will be joined
 to the one unit which is closest to them. This can be piped into the
-`makemap` function so that the contiguities can be visually inspected.
+`quickmap_contigs` function so that the contiguities can be visually
+inspected.
 
 ``` r
 
@@ -98,10 +107,10 @@ uk <- ne_states(country="united kingdom", returnclass = "sf") |>
   st_cast("POLYGON")
 uk$id <- 1:nrow(uk)
 
-uk_cont <- make_cont_k_islands(data = uk,
+uk_cont <- make_contigs(data = uk,
                     unit = id,
                     link_islands_k = 1) |> 
-  makemap(uk, id)
+  quickmap_contigs(uk, id)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
@@ -112,10 +121,10 @@ this example with the countries of Asia.
 ``` r
 
 asia <- ne_countries(continent="asia", returnclass = "sf")
-asia_cont <- make_cont_k_islands(data = asia,
+asia_cont <- make_contigs(data = asia,
                     unit = admin,
                     link_islands_k = 2) |> 
-  makemap(asia, admin)
+  quickmap_contigs(asia, admin)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
@@ -127,10 +136,10 @@ And for a country such as Indonesia which has many islands.
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
 indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_cont_k_islands(data = indonesia,
+indonesia_cont <- make_contigs(data = indonesia,
                     unit = id,
                     link_islands_k = 2) |> 
-  makemap(indonesia, id)
+  quickmap_contigs(indonesia, id)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -143,10 +152,10 @@ at a higher level by changing an argument in the function.
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
 indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_cont_k_islands(data = indonesia,
+indonesia_cont <- make_contigs(data = indonesia,
                     unit = name,
                     link_islands_k = 2) |> 
-  makemap(indonesia, name)
+  quickmap_contigs(indonesia, name)
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
@@ -188,19 +197,19 @@ For regions, counties and constituencies:
 
 ggarrange(
 uk_admins |> 
-  make_cont_k_islands(unit = region,
+  make_contigs(unit = region,
                     link_islands_k = 1) |> 
-  makemap(uk_admins, region),
+  quickmap_contigs(uk_admins, region),
 
 uk_admins |> 
-  make_cont_k_islands(unit = county,
+  make_contigs(unit = county,
                     link_islands_k = 1) |> 
-  makemap(uk_admins, county),
+  quickmap_contigs(uk_admins, county),
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency,
+  make_contigs(unit = constituency,
                     link_islands_k = 1) |> 
-  makemap(uk_admins, constituency),
+  quickmap_contigs(uk_admins, constituency),
 
 ncol=3
 )
@@ -223,11 +232,11 @@ using `manual_link_numeric`. Here we link Northern Ireland to Cornwall:
 
 ``` r
 
-make_cont_k_islands(data = uk_admins,
+make_contigs(data = uk_admins,
                     unit = county,
                     link_islands_k = 1) |> 
   manual_link_name("Northern Ireland","Cornwall") |> 
-  makemap(uk_admins, county)
+  quickmap_contigs(uk_admins, county)
 ```
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
@@ -237,12 +246,12 @@ unlink the East and West Midlands, and also the North West and East:
 
 ``` r
 
-make_cont_k_islands(data = uk_admins,
+make_contigs(data = uk_admins,
                     unit = region,
                     link_islands_k = 1) |> 
   manual_unlink_name("East Midlands","West Midlands") |> 
   manual_unlink_name("North West","North East") |> 
-  makemap(uk_admins, region)
+  quickmap_contigs(uk_admins, region)
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
@@ -253,9 +262,9 @@ In the following example, we link island constituencies to their nearest
 ``` r
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency,
+  make_contigs(unit = constituency,
                     link_islands_k = 3) |> 
-  makemap(uk_admins, constituency)
+  quickmap_contigs(uk_admins, constituency)
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
@@ -268,7 +277,7 @@ Using the `find_neighbours` function…
 ``` r
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency,
+  make_contigs(unit = constituency,
                       link_islands_k = 3) |> 
   find_neighbours("Isle Of Wight")
 #> [1] "Gosport"         "New Forest East" "New Forest West"
@@ -279,7 +288,7 @@ I only wanted Gosport. So I will remove the other two…
 ``` r
 
 uk_admins |> 
-  make_cont_k_islands(unit = constituency,
+  make_contigs(unit = constituency,
                       link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
   manual_unlink_name("Isle Of Wight","New Forest West") |> 
@@ -300,7 +309,7 @@ First use the pre-functions:
 
 nb_england <- uk_admins |> 
   filter(country %in% "England") |> 
-  make_cont_k_islands(unit = constituency,
+  make_contigs(unit = constituency,
                     link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
   manual_unlink_name("Isle Of Wight","New Forest West")
