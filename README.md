@@ -394,14 +394,14 @@ head(output[,1:10])
 #> 6 MULTIPOLYGON (((449576.1 36...
 ```
 
-#### quickmap_smooths()
+#### quickmap()
 
 A list containing plots (maps, as they are spatial) of the components
 can be generated with this function:
 
 ``` r
 
-plot_list <- quickmap_smooths(output)
+plot_list <- quickmap(output)
 ggarrange(plotlist = plot_list, 
           legend = "none",
           ncol = 3,
