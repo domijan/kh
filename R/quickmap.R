@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-quickmap_smooths <- function(output){
+quickmap <- function(output){
 
   output1 <- output |>
     dplyr::select(starts_with("random.effect"),starts_with("mrf.smooth"))
