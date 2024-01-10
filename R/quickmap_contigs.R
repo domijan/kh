@@ -19,6 +19,7 @@ quickmap_contigs <- function(cont, data, unit){
   if(is.matrix(cont)){
     temp <- spdep::mat2listw(cont, style="B")
     cont <- temp[2]
+    class(cont) <- "nb"
   }
 
   # make lines where there are contiguities
