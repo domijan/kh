@@ -67,9 +67,13 @@ make_contigs <- function(data, # sf dataframe
   }
 
   if(modelling.package == "mgcv"){
+    names(cont) <- data1 %>% dplyr::pull(unit1)
+    class(cont) <- "nb"
     return(cont)
   }
   if(modelling.package =="brms"){
+    names(cont) <- data1 %>% dplyr::pull(unit1)
+    class(cont) <- "nb"
     cont2 <-spdep::nb2mat(cont)
     cont2[cont2!=0] <- 1
     rownames(cont2) <- names(cont)
