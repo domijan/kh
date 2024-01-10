@@ -15,8 +15,6 @@ make_contigs <- function(data, # sf dataframe
                          modelling.package = "mgcv")
 {
 
-  unit1 <- deparse(substitute(unit))
-
   data1 <- data %>% dplyr::group_by(across({{ unit }})) %>% dplyr::summarise()
 
   # link_islands_k
@@ -73,7 +71,7 @@ make_contigs <- function(data, # sf dataframe
     cont2 <-spdep::nb2mat(cont)
     cont2[cont2!=0] <- 1
     rownames(cont2) <- names(cont)
-    colnames(cont2) <- names(cont)
+    # colnames(cont2) <- names(cont)
     return(cont2)
   }
 
