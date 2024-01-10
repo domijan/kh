@@ -68,8 +68,7 @@ make_contigs <- function(data, # sf dataframe
     return(cont)
   }
   if(modelling.package =="brms"){
-    cont2 <-spdep::nb2mat(cont)
-    cont2[cont2!=0] <- 1
+    cont2 <-spdep::nb2mat(cont, style="B")
     rownames(cont2) <- names(cont)
     # colnames(cont2) <- names(cont)
     return(cont2)
