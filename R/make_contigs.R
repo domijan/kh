@@ -5,7 +5,7 @@
 #' @param link_islands_k An integer value. The closest k units to isolated units will be represented as neighbours
 #' @param modelling.package either "mgcv" (default) or "brms"
 #'
-#' @return A neighbourhood list of class "nb"
+#' @return A neighbourhood list of class "nb" for "mgcv" or a neighbourhood matrix for "brms"
 #' @export
 #'
 #' @examples
