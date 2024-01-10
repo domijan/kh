@@ -3,14 +3,16 @@
 #' @param data A simple features dataframe
 #' @param unit The level (e.g. region, county) at which the neighbourhood structure operates
 #' @param link_islands_k An integer value. The closest k units to isolated units will be represented as neighbours
+#' @param modelling.package either "mgcv" (default) or "brms"
 #'
 #' @return A neighbourhood list of class "nb"
 #' @export
 #'
 #' @examples
 make_contigs <- function(data, # sf dataframe
-                                unit, # neighbour areal unit
-                                link_islands_k = 0) # link island to k nearest units, 0 removes all islands
+                         unit, # neighbour areal unit
+                         link_islands_k = 0, # link island to k nearest units, 0 removes all islands
+                         modelling.package = "mgcv")
 {
 
   unit1 <- deparse(substitute(unit))
@@ -51,9 +53,6 @@ make_contigs <- function(data, # sf dataframe
 
     names(cont) <- data1 %>% dplyr::pull(unit1)
     class(cont) <- "nb"
-
-    return(cont)
-
   }
 
   # otherwise, just return unaltered contiguity structure
@@ -65,6 +64,16 @@ make_contigs <- function(data, # sf dataframe
 
     names(cont) <- data1 %>% dplyr::pull(unit1)
     class(cont) <- "nb"
+  }
+
+  if(modelling.package == "mgcv"){
+    return(cont)
+  }
+  if(modelling.package =="brms"){
+    cont <-nb2mat(cont)
+    cont[cont!=0] <- 1
+    rownames(cont)<-data1 %>% dplyr::pull(unit1)
+    return(cont)
   }
 
 }
