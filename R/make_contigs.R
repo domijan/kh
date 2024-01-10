@@ -17,7 +17,7 @@ make_contigs <- function(data, # sf dataframe
 
   unit1 <- deparse(substitute(unit))
 
-  data1 <- data %>% dplyr::group_by(unit) %>% dplyr::summarise()
+  data1 <- data %>% dplyr::group_by(`unit`) %>% dplyr::summarise()
 
   # link_islands_k
 
