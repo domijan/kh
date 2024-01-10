@@ -70,7 +70,7 @@ make_contigs <- function(data, # sf dataframe
     return(cont)
   }
   if(modelling.package =="brms"){
-    cont <-nb2mat(cont)
+    cont <-spdep::nb2mat(cont)
     cont[cont!=0] <- 1
     rownames(cont)<-data1 %>% dplyr::pull(unit1)
     return(cont)
