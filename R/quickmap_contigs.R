@@ -10,13 +10,16 @@
 #' @examples
 quickmap_contigs <- function(cont, data, unit){
   # to show the contiguities on a map
-  unit1 <- deparse(substitute(unit))
 
-  data1 <- data %>% dplyr::group_by(.data[[unit1]]) %>% dplyr::summarise()
-
+  data1 <- data %>% dplyr::group_by({{ unit }}) %>% dplyr::summarise()
 
   # first, the dataframe must be a spdf, spatial dataframe
   df_sp <- sf::as_Spatial(data1)
+
+  if(is.matrix(cont)){
+    temp <- spdep::mat2listw(cont, style="B")
+    cont <- temp[2]
+  }
 
   # make lines where there are contiguities
   neighbors_sf <- as(spdep::nb2lines(cont, coords = df_sp), 'sf')
