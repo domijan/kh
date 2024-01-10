@@ -4,7 +4,7 @@
 \alias{make_contigs}
 \title{Title}
 \usage{
-make_contigs(data, unit, link_islands_k = 0)
+make_contigs(data, unit, link_islands_k = 0, modelling.package = "mgcv")
 }
 \arguments{
 \item{data}{A simple features dataframe}
@@ -12,9 +12,11 @@ make_contigs(data, unit, link_islands_k = 0)
 \item{unit}{The level (e.g. region, county) at which the neighbourhood structure operates}
 
 \item{link_islands_k}{An integer value. The closest k units to isolated units will be represented as neighbours}
+
+\item{modelling.package}{either "mgcv" (default) or "brms"}
 }
 \value{
-A neighbourhood list of class "nb"
+A neighbourhood list of class "nb" for "mgcv" or a neighbourhood matrix for "brms"
 }
 \description{
 Title
