@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+ md_document:
+    variant: markdown_github
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -109,7 +111,7 @@ The following is a map of the UK from the `rnaturalearth` package. It features m
 
 For a country with many islands such as Indonesia, we can compute contiguities by individual island:
 
-```{r, fig.width=12, fig.height=8, warning=FALSE}
+```{r, fig.width=12, fig.height=4, warning=FALSE}
 
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
@@ -124,7 +126,7 @@ indonesia_cont <- make_contigs(data = indonesia,
 
 Rather than operating at the individual island level, this can be done at a higher level by changing an argument in the function.
 
-```{r, fig.width=12, fig.height=8, warning=FALSE}
+```{r, fig.width=12, fig.height=4, warning=FALSE}
 
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
@@ -163,7 +165,7 @@ temp[1:10,1:10]
 
 This could be changed to join each island to the two closest units as in this example with the countries of Asia.
 
-```{r, fig.width=12, fig.height=8}
+```{r, fig.width=12, fig.height=7}
 
 asia <- ne_countries(continent="asia", returnclass = "sf")
 asia_cont <- make_contigs(data = asia,

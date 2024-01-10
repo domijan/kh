@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # kh package
@@ -19,7 +18,7 @@ Two packages which are commonly used to fit such models are `mgcv` and
     required by the modelling package.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|-------------------------|------------|----------------------------------------------------------------------------------------------------------------------|
+|-------------------|-------------------|-----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
@@ -28,8 +27,8 @@ Two packages which are commonly used to fit such models are `mgcv` and
 | manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
 | manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
-2.  The model can then be fit as normal within `mgcv` or `brms`.
-3.  The *post-processing tools* then extract the results of the model
+1.  The model can then be fit as normal within `mgcv` or `brms`.
+2.  The *post-processing tools* then extract the results of the model
     into a tidy `sf` format so they can easily be mapped.
 
 | Function         | Purpose               |
@@ -89,7 +88,7 @@ then *check* a map of it to see if it looks appropriate. Functions for
 further manual *editing* can then be used until it looks as it should.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|-------------------------|------------|----------------------------------------------------------------------------------------------------------------------|
+|-------------------|-------------------|-----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
