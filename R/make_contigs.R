@@ -49,7 +49,7 @@ make_contigs <- function(data, # sf dataframe
       sf::st_intersects() %>%
       purrr::imap(~setdiff(.x,.y))
 
-    names(cont) <- data1 %>% dplyr::pull(unit1)
+    names(cont) <- data1 %>% dplyr::pull({{ unit }})
     class(cont) <- "nb"
   }
 
