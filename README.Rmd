@@ -75,6 +75,7 @@ if (any(installed_packages == FALSE)) {
 
 # Packages loading
 invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
+
 ```
 
 ## Example
@@ -106,16 +107,55 @@ library(kh)
 
 The following is a map of the UK from the `rnaturalearth` package. It features many non-contiguous units. In the following example of `make_contigs`, the argument k is set to one. This means that in addition to all of the normal contiguities, all islands will be joined to the one unit which is closest to them. This can be piped into the `quickmap_contigs` function so that the contiguities can be visually inspected.
 
-```{r, fig.width=8, fig.height=8, warning=FALSE}
+For a country with many islands such as Indonesia, we can compute contiguities by individual island:
 
-uk <- ne_states(country="united kingdom", returnclass = "sf") |> 
+```{r, fig.width=12, fig.height=8, warning=FALSE}
+
+indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
-uk$id <- 1:nrow(uk)
+indonesia$id <-1:nrow(indonesia)
+indonesia_cont <- make_contigs(data = indonesia,
+                               unit = id,
+                               link_islands_k = 2) |> 
+  quickmap_contigs(indonesia, id)
 
-uk_cont <- make_contigs(data = uk,
-                    unit = id,
-                    link_islands_k = 1) |> 
-  quickmap_contigs(uk, id)
+```
+
+Rather than operating at the individual island level, this can be done at a higher level by changing an argument in the function.
+
+```{r, fig.width=12, fig.height=8, warning=FALSE}
+
+indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
+  st_cast("POLYGON")
+indonesia$id <-1:nrow(indonesia)
+indonesia_cont <- make_contigs(data = indonesia,
+                               unit = name,
+                               link_islands_k = 2) |> 
+  quickmap_contigs(indonesia, name)
+
+```
+
+If we wish to use `mgcv`, we get a neighbourhood list:
+
+```{r}
+
+make_contigs(data = indonesia,
+             unit = name,
+             link_islands_k = 2,
+             modelling.package = "mgcv") |> 
+  head(8)
+
+```
+
+Or we can get a neighbourhood matrix by selecting `brms`:
+
+```{r}
+
+temp <- make_contigs(data = indonesia,
+                     unit = name,
+                     link_islands_k = 2,
+                     modelling.package = "brms") 
+temp[1:10,1:10]
 
 ```
 
@@ -131,31 +171,23 @@ asia_cont <- make_contigs(data = asia,
 
 ```
 
-And for a country such as Indonesia which has many islands.
+```{r}
 
-```{r, fig.width=12, fig.height=8, warning=FALSE}
-
-indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
-  st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_contigs(data = indonesia,
-                    unit = id,
-                    link_islands_k = 2) |> 
-  quickmap_contigs(indonesia, id)
+make_contigs(data = asia,
+             unit = admin,
+             link_islands_k = 2,
+             modelling.package = "mgcv") |> 
+  head(8)
 
 ```
 
-Rather than operating at the individual island level, this can be done at a higher level by changing an argument in the function.
+```{r}
 
-```{r, fig.width=12, fig.height=8, warning=FALSE}
-
-indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
-  st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_contigs(data = indonesia,
-                    unit = name,
-                    link_islands_k = 2) |> 
-  quickmap_contigs(indonesia, name)
+temp <- make_contigs(data = asia,
+                     unit = admin,
+                     link_islands_k = 2,
+                     modelling.package = "brms")
+temp[1:10,1:10]
 
 ```
 

@@ -115,19 +115,104 @@ to the one unit which is closest to them. This can be piped into the
 `quickmap_contigs` function so that the contiguities can be visually
 inspected.
 
+For a country with many islands such as Indonesia, we can compute
+contiguities by individual island:
+
 ``` r
 
-uk <- ne_states(country="united kingdom", returnclass = "sf") |> 
+indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
-uk$id <- 1:nrow(uk)
-
-uk_cont <- make_contigs(data = uk,
-                    unit = id,
-                    link_islands_k = 1) |> 
-  quickmap_contigs(uk, id)
+indonesia$id <-1:nrow(indonesia)
+indonesia_cont <- make_contigs(data = indonesia,
+                               unit = id,
+                               link_islands_k = 2) |> 
+  quickmap_contigs(indonesia, id)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+Rather than operating at the individual island level, this can be done
+at a higher level by changing an argument in the function.
+
+``` r
+
+indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
+  st_cast("POLYGON")
+indonesia$id <-1:nrow(indonesia)
+indonesia_cont <- make_contigs(data = indonesia,
+                               unit = name,
+                               link_islands_k = 2) |> 
+  quickmap_contigs(indonesia, name)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+If we wish to use `mgcv`, we get a neighbourhood list:
+
+``` r
+
+make_contigs(data = indonesia,
+             unit = name,
+             link_islands_k = 2,
+             modelling.package = "mgcv") |> 
+  head(8)
+#> $Aceh
+#> [1] 32
+#> 
+#> $Bali
+#> [1] 11 20
+#> 
+#> $`Bangka-Belitung`
+#> [1]  8 31
+#> 
+#> $Banten
+#> [1] 7 9
+#> 
+#> $Bengkulu
+#> [1]  8 17 30 31
+#> 
+#> $Gorontalo
+#> [1] 27 29
+#> 
+#> $`Jakarta Raya`
+#> [1] 4 9
+#> 
+#> $Jambi
+#> [1]  3  5 16 24 30 31
+```
+
+Or we can get a neighbourhood matrix by selecting `brms`:
+
+``` r
+
+temp <- make_contigs(data = indonesia,
+                     unit = name,
+                     link_islands_k = 2,
+                     modelling.package = "brms") 
+temp[1:10,1:10]
+#>                 Aceh Bali Bangka-Belitung Banten Bengkulu Gorontalo
+#> Aceh               0    0               0      0        0         0
+#> Bali               0    0               0      0        0         0
+#> Bangka-Belitung    0    0               0      0        0         0
+#> Banten             0    0               0      0        0         0
+#> Bengkulu           0    0               0      0        0         0
+#> Gorontalo          0    0               0      0        0         0
+#> Jakarta Raya       0    0               0      1        0         0
+#> Jambi              0    0               1      0        1         0
+#> Jawa Barat         0    0               0      1        0         0
+#> Jawa Tengah        0    0               0      0        0         0
+#>                 Jakarta Raya Jambi Jawa Barat Jawa Tengah
+#> Aceh                       0     0          0           0
+#> Bali                       0     0          0           0
+#> Bangka-Belitung            0     1          0           0
+#> Banten                     1     0          1           0
+#> Bengkulu                   0     1          0           0
+#> Gorontalo                  0     0          0           0
+#> Jakarta Raya               0     0          1           0
+#> Jambi                      0     0          0           0
+#> Jawa Barat                 1     0          0           1
+#> Jawa Tengah                0     0          1           0
+```
 
 This could be changed to join each island to the two closest units as in
 this example with the countries of Asia.
@@ -141,38 +226,70 @@ asia_cont <- make_contigs(data = asia,
   quickmap_contigs(asia, admin)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-
-And for a country such as Indonesia which has many islands.
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 ``` r
 
-indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
-  st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_contigs(data = indonesia,
-                    unit = id,
-                    link_islands_k = 2) |> 
-  quickmap_contigs(indonesia, id)
+make_contigs(data = asia,
+             unit = admin,
+             link_islands_k = 2,
+             modelling.package = "mgcv") |> 
+  head(8)
+#> $Afghanistan
+#> [1]  8 14 31 40 43 45
+#> 
+#> $Armenia
+#> [1]  3 11 14 42
+#> 
+#> $Azerbaijan
+#> [1]  2 11 14 42
+#> 
+#> $Bangladesh
+#> [1] 12 26
+#> 
+#> $Bhutan
+#> [1]  8 12
+#> 
+#> $Brunei
+#> [1] 24 33
+#> 
+#> $Cambodia
+#> [1] 22 41 46
+#> 
+#> $China
+#>  [1]  1  5 12 19 21 22 25 26 27 28 31 39 40 46
 ```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
-
-Rather than operating at the individual island level, this can be done
-at a higher level by changing an argument in the function.
 
 ``` r
 
-indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
-  st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
-indonesia_cont <- make_contigs(data = indonesia,
-                    unit = name,
-                    link_islands_k = 2) |> 
-  quickmap_contigs(indonesia, name)
+temp <- make_contigs(data = asia,
+                     unit = admin,
+                     link_islands_k = 2,
+                     modelling.package = "brms")
+temp[1:10,1:10]
+#>             Afghanistan Armenia Azerbaijan Bangladesh Bhutan Brunei Cambodia
+#> Afghanistan           0       0          0          0      0      0        0
+#> Armenia               0       0          1          0      0      0        0
+#> Azerbaijan            0       1          0          0      0      0        0
+#> Bangladesh            0       0          0          0      0      0        0
+#> Bhutan                0       0          0          0      0      0        0
+#> Brunei                0       0          0          0      0      0        0
+#> Cambodia              0       0          0          0      0      0        0
+#> China                 1       0          0          0      1      0        0
+#> Cyprus                0       0          0          0      0      0        0
+#> East Timor            0       0          0          0      0      0        0
+#>             China Cyprus East Timor
+#> Afghanistan     1      0          0
+#> Armenia         0      0          0
+#> Azerbaijan      0      0          0
+#> Bangladesh      0      0          0
+#> Bhutan          1      0          0
+#> Brunei          0      0          0
+#> Cambodia        0      0          0
+#> China           0      0          0
+#> Cyprus          0      0          0
+#> East Timor      0      0          0
 ```
-
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 Applied to the situation of modelling voting behaviour in the UK, we can
 set up contiguities according to administrative level.
@@ -229,7 +346,7 @@ ncol=3
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 #### manual_link_name()
 
@@ -253,7 +370,7 @@ make_contigs(data = uk_admins,
   quickmap_contigs(uk_admins, county)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 or `manual_unlink_name` to unlink units using their names. Here, we
 unlink the East and West Midlands, and also the North West and North
@@ -269,7 +386,7 @@ make_contigs(data = uk_admins,
   quickmap_contigs(uk_admins, region)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
 
 In the following example, we link island constituencies to their nearest
 3 constituencies:
@@ -282,7 +399,7 @@ uk_admins |>
   quickmap_contigs(uk_admins, constituency)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 #### find_neighbours()
 
@@ -437,4 +554,4 @@ ggarrange(plotlist = plot_list,
           nrow = 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="100%" />
