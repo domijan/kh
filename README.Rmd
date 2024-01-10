@@ -116,7 +116,8 @@ indonesia <- ne_states(country="indonesia", returnclass = "sf") |>
 indonesia$id <-1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = id,
-                               link_islands_k = 2) |> 
+                               link_islands_k = 2, 
+                               modelling.package = "brms") |> 
   quickmap_contigs(indonesia, id)
 
 ```
@@ -130,7 +131,8 @@ indonesia <- ne_states(country="indonesia", returnclass = "sf") |>
 indonesia$id <-1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = name,
-                               link_islands_k = 2) |> 
+                               link_islands_k = 2,
+                               modelling.package = "mgcv") |> 
   quickmap_contigs(indonesia, name)
 
 ```

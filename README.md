@@ -125,7 +125,8 @@ indonesia <- ne_states(country="indonesia", returnclass = "sf") |>
 indonesia$id <-1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = id,
-                               link_islands_k = 2) |> 
+                               link_islands_k = 2, 
+                               modelling.package = "brms") |> 
   quickmap_contigs(indonesia, id)
 ```
 
@@ -141,7 +142,8 @@ indonesia <- ne_states(country="indonesia", returnclass = "sf") |>
 indonesia$id <-1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = name,
-                               link_islands_k = 2) |> 
+                               link_islands_k = 2,
+                               modelling.package = "mgcv") |> 
   quickmap_contigs(indonesia, name)
 ```
 
@@ -190,28 +192,17 @@ temp <- make_contigs(data = indonesia,
                      link_islands_k = 2,
                      modelling.package = "brms") 
 temp[1:10,1:10]
-#>                 Aceh Bali Bangka-Belitung Banten Bengkulu Gorontalo
-#> Aceh               0    0               0      0        0         0
-#> Bali               0    0               0      0        0         0
-#> Bangka-Belitung    0    0               0      0        0         0
-#> Banten             0    0               0      0        0         0
-#> Bengkulu           0    0               0      0        0         0
-#> Gorontalo          0    0               0      0        0         0
-#> Jakarta Raya       0    0               0      1        0         0
-#> Jambi              0    0               1      0        1         0
-#> Jawa Barat         0    0               0      1        0         0
-#> Jawa Tengah        0    0               0      0        0         0
-#>                 Jakarta Raya Jambi Jawa Barat Jawa Tengah
-#> Aceh                       0     0          0           0
-#> Bali                       0     0          0           0
-#> Bangka-Belitung            0     1          0           0
-#> Banten                     1     0          1           0
-#> Bengkulu                   0     1          0           0
-#> Gorontalo                  0     0          0           0
-#> Jakarta Raya               0     0          1           0
-#> Jambi                      0     0          0           0
-#> Jawa Barat                 1     0          0           1
-#> Jawa Tengah                0     0          1           0
+#>                 [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#> Aceh               0    0    0    0    0    0    0    0    0     0
+#> Bali               0    0    0    0    0    0    0    0    0     0
+#> Bangka-Belitung    0    0    0    0    0    0    0    1    0     0
+#> Banten             0    0    0    0    0    0    1    0    1     0
+#> Bengkulu           0    0    0    0    0    0    0    1    0     0
+#> Gorontalo          0    0    0    0    0    0    0    0    0     0
+#> Jakarta Raya       0    0    0    1    0    0    0    0    1     0
+#> Jambi              0    0    1    0    1    0    0    0    0     0
+#> Jawa Barat         0    0    0    1    0    0    1    0    0     1
+#> Jawa Tengah        0    0    0    0    0    0    0    0    1     0
 ```
 
 This could be changed to join each island to the two closest units as in
@@ -267,28 +258,17 @@ temp <- make_contigs(data = asia,
                      link_islands_k = 2,
                      modelling.package = "brms")
 temp[1:10,1:10]
-#>             Afghanistan Armenia Azerbaijan Bangladesh Bhutan Brunei Cambodia
-#> Afghanistan           0       0          0          0      0      0        0
-#> Armenia               0       0          1          0      0      0        0
-#> Azerbaijan            0       1          0          0      0      0        0
-#> Bangladesh            0       0          0          0      0      0        0
-#> Bhutan                0       0          0          0      0      0        0
-#> Brunei                0       0          0          0      0      0        0
-#> Cambodia              0       0          0          0      0      0        0
-#> China                 1       0          0          0      1      0        0
-#> Cyprus                0       0          0          0      0      0        0
-#> East Timor            0       0          0          0      0      0        0
-#>             China Cyprus East Timor
-#> Afghanistan     1      0          0
-#> Armenia         0      0          0
-#> Azerbaijan      0      0          0
-#> Bangladesh      0      0          0
-#> Bhutan          1      0          0
-#> Brunei          0      0          0
-#> Cambodia        0      0          0
-#> China           0      0          0
-#> Cyprus          0      0          0
-#> East Timor      0      0          0
+#>             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#> Afghanistan    0    0    0    0    0    0    0    1    0     0
+#> Armenia        0    0    1    0    0    0    0    0    0     0
+#> Azerbaijan     0    1    0    0    0    0    0    0    0     0
+#> Bangladesh     0    0    0    0    0    0    0    0    0     0
+#> Bhutan         0    0    0    0    0    0    0    1    0     0
+#> Brunei         0    0    0    0    0    0    0    0    0     0
+#> Cambodia       0    0    0    0    0    0    0    0    0     0
+#> China          1    0    0    0    1    0    0    0    0     0
+#> Cyprus         0    0    0    0    0    0    0    0    0     0
+#> East Timor     0    0    0    0    0    0    0    0    0     0
 ```
 
 Applied to the situation of modelling voting behaviour in the UK, we can
