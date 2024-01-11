@@ -34,7 +34,7 @@ quickmap_contigs <- function(cont, data, unit){
   # map the connections
   plot <- ggplot2::ggplot() +
     ggplot2::geom_sf(data=data1, fill="lightgoldenrodyellow", colour="gray70", linewidth=0.5) +
-    ggplot2::geom_sf(data=endpoints_coords) +
+    ggplot2::geom_sf(data=endpoints_coords, size=0.5) +
     ggplot2::geom_sf(data = neighbors_sf, colour="darkred", linewidth=0.08) +
     ggplot2::guides(colour = "none") +
     ggplot2::coord_sf(datum=NA) +
