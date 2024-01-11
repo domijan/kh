@@ -228,7 +228,7 @@ uk_admins <- elect_results |>
 
 For regions, counties and constituencies:
 
-```{r, fig.width=12, fig.height=6}
+```{r, fig.width=10, fig.height=10}
 
 ggarrange(
 uk_admins |> 
@@ -246,7 +246,8 @@ uk_admins |>
                     link_islands_k = 1) |> 
   quickmap_contigs(uk_admins, constituency),
 
-ncol=3
+ncol=3,
+widths = c(1,2,3)
 )
 
 ```

@@ -321,7 +321,8 @@ uk_admins |>
                     link_islands_k = 1) |> 
   quickmap_contigs(uk_admins, constituency),
 
-ncol=3
+ncol=3,
+widths = c(1,2,3)
 )
 ```
 
