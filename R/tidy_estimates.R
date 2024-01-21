@@ -13,7 +13,7 @@ tidy_estimates <- function(model,dataframe){
   numeric_columns <- sapply(dataframe, is.numeric)
 
   # Replace numeric columns with the number 1
-  tempdf[, numeric_columns] <- 1
+  tempdf <- dataframe[, numeric_columns] <- 1
 
   output <- predict(model, tempdf, type = "terms", se.fit = TRUE) |>
     as.data.frame()
