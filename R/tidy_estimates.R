@@ -9,10 +9,13 @@
 #' @examples
 tidy_estimates <- function(model,dataframe){
 
-  tempdf <-dataframe |>
-    mutate(across(where(is.numeric), ~replace_na(., 1)))
+  # Identify numeric columns
+  numeric_columns <- sapply(dataframe, is.numeric)
 
-  output <- predict(model, dataframe, type = "terms", se.fit = TRUE) |>
+  # Replace numeric columns with the number 1
+  tempdf[, numeric_columns] <- 1
+
+  output <- predict(model, tempdf, type = "terms", se.fit = TRUE) |>
     as.data.frame()
 
   # change names from fit. to the type of effect (random effect or mrf.smooth)
