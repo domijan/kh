@@ -19,7 +19,10 @@ tidy_estimates <- function(model,dataframe){
   output <- predict(model, tempdf, type = "terms", se.fit = TRUE) |>
     as.data.frame()
 
+  ### need different process for renaming cols if one versus more than one smooth:
+
   ### if only one smooth:
+
   if(nrow(summary(model$smooth)) == 1) {
     # change names from fit. to the type of effect (random effect or mrf.smooth)
     names(output)[1] <- paste0(summary(model$smooth)[,2],".")
@@ -27,8 +30,9 @@ tidy_estimates <- function(model,dataframe){
     names(output)[2] <- paste0("se.",summary(model$smooth)[,2],".")
   }
 
+  ### if more than one smooth:
+
   else {
-    ### if more than one smooth:
 
     # change names from fit. to the type of effect (random effect or mrf.smooth)
     names(output)[stringr::str_starts(names(output),"fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
