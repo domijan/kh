@@ -23,9 +23,12 @@ tidy_estimates <- function(model,dataframe){
 
   ### if only one smooth:
 
-  if(nrow(summary(model$smooth)) == 1) {
+  if(ncol(output) == 2 & nrow(summary(model$smooth)) == 1) {
     # change names from fit. to the type of effect (random effect or mrf.smooth)
     names(output)[1] <- paste0(summary(model$smooth)[,2],".")
+    names(output)[stringr::str_starts(names(output),"fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
+                                                                                       "fit.s.",
+                                                                                       paste0(summary(model$smooth)[,2],"."))
     # same for standard error columns
     names(output)[2] <- paste0("se.",summary(model$smooth)[,2],".")
   }
