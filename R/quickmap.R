@@ -18,7 +18,8 @@ quickmap <- function(output){
   # split column names into title and subtitle
   # either side of second . in string
   newtitle <- sub("^(.*?\\..*?)\\..*$", "\\1", fillnames)
-  newsubtitle <- sub(".*\\.[^.]*\\.(.*)", "\\1", fillnames)
+  # extract the text after random.effect. or mrf.smooth.
+  newsubtitle <- str_replace_all(fillnames, "(random\\.effect\\.|mrf\\.smooth\\.)", "")
 
   plot_list <- list()
   for (i in 1:length(fillnames)){
