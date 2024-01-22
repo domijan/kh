@@ -53,6 +53,9 @@ tidy_estimates <- function(model,dataframe){
   # swap around and put a | in the mrf smooths
   names(output) <- stringr::str_replace_all(names(output), "\\.{2}", "|")
 
+  # rearrange the random.effect colnames
+  names(output) <- stringr::str_replace_all(names(output), "random\\.effect\\.(.*?)\\.", "random.effect.\\1|")
+
   output <- output |>
     cbind(dataframe) |>
     as.data.frame() |>
