@@ -19,14 +19,30 @@ tidy_estimates <- function(model,dataframe){
   output <- predict(model, tempdf, type = "terms", se.fit = TRUE) |>
     as.data.frame()
 
-  # change names from fit. to the type of effect (random effect or mrf.smooth)
-  names(output)[stringr::str_starts(names(output),"fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
-                                                                                     "fit.s.",
-                                                                                     paste0(summary(model$smooth)[,2],"."))
-  # same for standard error columns
-  names(output)[stringr::str_starts(names(output),"se.fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"se.fit.s.")],
-                                                                                        "se.fit.s.",
-                                                                                        paste0("se.",summary(model$smooth)[,2],"."))
+  ### if only one smooth:
+  if(nrow(summary(model$smooth)) == 1) {
+    # change names from fit. to the type of effect (random effect or mrf.smooth)
+    names(output)[1] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
+                                             "fit.s.",
+                                             paste0(summary(model$smooth)[,2],"."))
+    # same for standard error columns
+    names(output)[2] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"se.fit.s.")],
+                                             "se.fit.s.",
+                                             paste0("se.",summary(model$smooth)[,2],"."))
+  }
+
+  else {
+    ### if more than one smooth:
+
+    # change names from fit. to the type of effect (random effect or mrf.smooth)
+    names(output)[stringr::str_starts(names(output),"fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"fit.s.")],
+                                                                                       "fit.s.",
+                                                                                       paste0(summary(model$smooth)[,2],"."))
+    # same for standard error columns
+    names(output)[stringr::str_starts(names(output),"se.fit.s.")] <- stringr::str_replace(names(output)[stringr::str_starts(names(output),"se.fit.s.")],
+                                                                                          "se.fit.s.",
+                                                                                          paste0("se.",summary(model$smooth)[,2],"."))
+  }
 
   # remove the . at the end of each matching string
   names(output) <- stringr::str_remove_all(names(output), "\\.$")
