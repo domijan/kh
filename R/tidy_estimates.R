@@ -56,6 +56,9 @@ tidy_estimates <- function(model,dataframe){
   # rearrange the random.effect colnames
   names(output) <- stringr::str_replace_all(names(output), "random\\.effect\\.(.*?)\\.", "random.effect.\\1|")
 
+  # swap order around the | character
+  names(output) <- stringr::str_replace_all(names(output), "\\.([^.]*)\\|(.*)", ".\\2|\\1")
+
   output <- output |>
     cbind(dataframe) |>
     as.data.frame() |>
