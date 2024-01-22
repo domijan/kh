@@ -356,13 +356,13 @@ Then fit a `gam` model with a combination of random effects and ICAR components:
 
 model <- gam(con_17 ~ 
                born_england + 
-               deprived_1 + 
+               deprived_1 +
                degree + 
                s(region, bs="re") +
                s(county, bs="re") +
-               s(constituency, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
+               s(county, degree, bs="re") +
+               s(constituency, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50),
              data=df_england, method="REML")
 
 ```

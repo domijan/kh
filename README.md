@@ -445,13 +445,13 @@ components:
 
 model <- gam(con_17 ~ 
                born_england + 
-               deprived_1 + 
+               deprived_1 +
                degree + 
                s(region, bs="re") +
                s(county, bs="re") +
-               s(constituency, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency, by=deprived_1, bs='mrf', xt=list(nb=nb_england),k=50) +
-               s(constituency, by=degree, bs='mrf', xt=list(nb=nb_england),k=50),
+               s(county, degree, bs="re") +
+               s(constituency, bs='mrf', xt=list(nb=nb_england),k=50) +
+               s(constituency, by=born_england, bs='mrf', xt=list(nb=nb_england),k=50),
              data=df_england, method="REML")
 ```
 
@@ -476,48 +476,41 @@ head(output[,1:10])
 #> Dimension:     XY
 #> Bounding box:  xmin: 368282 ymin: 101579.6 xmax: 532401.3 ymax: 393553.9
 #> Projected CRS: OSGB36 / British National Grid
-#>   random.effect.region random.effect.county
-#> 1         6.073839e-04             1.706711
-#> 2        -5.774813e-05            -2.703870
-#> 3        -4.414490e-04            -1.505832
-#> 4         2.417885e-05             1.090575
-#> 5         6.073839e-04             2.668064
-#> 6         2.417885e-05            -2.382387
-#>   mrf.smooth.constituency|born_england mrf.smooth.constituency|deprived_1
-#> 1                            11.629070                           28.52421
-#> 2                             1.872756                           19.69007
-#> 3                           -12.234466                           11.23745
-#> 4                            -2.637204                           17.71635
-#> 5                             7.127869                           25.82921
-#> 6                            -2.938126                           18.32714
-#>   mrf.smooth.constituency|degree se.random.effect.region
-#> 1                       1.067502              0.03766500
-#> 2                       6.371619              0.03766566
-#> 3                      19.993120              0.03766621
-#> 4                       4.072850              0.03766501
-#> 5                      -4.036583              0.03766500
-#> 6                       2.438712              0.03766501
-#>   se.random.effect.county se.mrf.smooth.constituency|born_england
-#> 1                2.508186                                3.901682
-#> 2                2.365326                                3.417439
-#> 3                2.358090                                4.065510
-#> 4                2.264675                                3.712115
-#> 5                2.513013                                5.573187
-#> 6                2.596432                                4.025844
-#>   se.mrf.smooth.constituency|deprived_1 se.mrf.smooth.constituency|degree
-#> 1                              11.64201                          2.738666
-#> 2                              11.78601                          1.792209
-#> 3                              10.57810                          4.511394
-#> 4                              11.17196                          1.572283
-#> 5                              11.84416                          3.871403
-#> 6                              11.61155                          1.121780
-#>                         geometry
-#> 1 MULTIPOLYGON (((485408.1 15...
-#> 2 MULTIPOLYGON (((406519.5 30...
-#> 3 MULTIPOLYGON (((379104.1 39...
-#> 4 MULTIPOLYGON (((444868.5 35...
-#> 5 MULTIPOLYGON (((506643.3 12...
-#> 6 MULTIPOLYGON (((449576.1 36...
+#>   random.effect.region random.effect.county random.effect.degree|county
+#> 1         9.106699e-05         0.0022038150                  0.12544536
+#> 2        -1.276271e-05        -0.0040218262                  0.01806311
+#> 3        -1.915533e-04         0.0004535066                  0.03735045
+#> 4         1.403770e-06         0.0002235744                  0.20328894
+#> 5         9.106699e-05         0.0011533002                  0.10133193
+#> 6         1.403770e-06        -0.0020776751                 -0.12805643
+#>   mrf.smooth.constituency mrf.smooth.born_england|constituency
+#> 1                8.191301                          0.044261369
+#> 2               -1.914969                          0.018425793
+#> 3              -15.020994                         -0.053140703
+#> 4               -5.521289                         -0.007640393
+#> 5                2.766880                          0.017852827
+#> 6               -5.843950                         -0.009806297
+#>   se.random.effect.region se.random.effect.county
+#> 1              0.02519786               0.1029829
+#> 2              0.02519795               0.1029725
+#> 3              0.02519802               0.1029684
+#> 4              0.02519771               0.1029772
+#> 5              0.02519786               0.1029870
+#> 6              0.02519771               0.1029781
+#>   se.random.effect.degree|county se.mrf.smooth.constituency
+#> 1                      0.1755541                   3.967701
+#> 2                      0.1725884                   2.982417
+#> 3                      0.1553289                   4.194030
+#> 4                      0.1803089                   3.253374
+#> 5                      0.1969387                   5.028727
+#> 6                      0.1872917                   3.550224
+#>   se.mrf.smooth.born_england|constituency                       geometry
+#> 1                              0.03873321 MULTIPOLYGON (((485408.1 15...
+#> 2                              0.03028813 MULTIPOLYGON (((406519.5 30...
+#> 3                              0.04114809 MULTIPOLYGON (((379104.1 39...
+#> 4                              0.03199243 MULTIPOLYGON (((444868.5 35...
+#> 5                              0.05088886 MULTIPOLYGON (((506643.3 12...
+#> 6                              0.03458959 MULTIPOLYGON (((449576.1 36...
 ```
 
 #### quickmap()
