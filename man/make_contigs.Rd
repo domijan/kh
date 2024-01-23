@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_contigs.R
 \name{make_contigs}
 \alias{make_contigs}
-\title{Title}
+\title{Generate neighbourhood list or matrix, accounting for the presence of discontiguities}
 \usage{
 make_contigs(data, unit, link_islands_k = 0, modelling.package = "mgcv")
 }
@@ -19,5 +19,5 @@ make_contigs(data, unit, link_islands_k = 0, modelling.package = "mgcv")
 A neighbourhood list of class "nb" for "mgcv" or a neighbourhood matrix for "brms"
 }
 \description{
-Title
+Generate neighbourhood list or matrix, accounting for the presence of discontiguities
 }
