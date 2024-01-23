@@ -1,4 +1,4 @@
-#' Title
+#' Generates quick maps of random and mrf effects from mgcv models
 #'
 #' @param output the `sf` dataframe output of `get_output()`
 #'

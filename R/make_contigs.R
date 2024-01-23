@@ -1,4 +1,4 @@
-#' Title
+#' Generate neighbourhood list or matrix, accounting for the presence of discontiguities
 #'
 #' @param data A simple features dataframe
 #' @param unit The level (e.g. region, county) at which the neighbourhood structure operates
