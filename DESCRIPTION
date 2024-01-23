@@ -8,7 +8,7 @@ Description: Pre and post convenience functions for fitting models based on cont
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/horankev/kh
+URL: https://github.com/horankev/kh, https://horankev.github.io/kh/
 BugReports: https://github.com/horankev/kh/issues
 Imports: 
     dplyr,
