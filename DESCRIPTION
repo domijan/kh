@@ -1,6 +1,6 @@
 Package: kh
 Type: Package
-Title: Helper Functions
+Title: pre- and post-processing tools for areal spatial models which deal with contiguity
 Version: 0.1.0
 Author: Kevin Horan
 Maintainer: The package maintainer <yourself@somewhere.net>
