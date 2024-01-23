@@ -1,4 +1,4 @@
-#' Generates quick map of specified contiguities
+#' Generate quick map of specified contiguities
 #'
 #' @param cont A neighbourhood list of class "nb"
 #' @param data A simple features dataframe

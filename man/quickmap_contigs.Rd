@@ -2,7 +2,7 @@
 % Please edit documentation in R/quickmap_contigs.R
 \name{quickmap_contigs}
 \alias{quickmap_contigs}
-\title{Generates quick map of specified contiguities}
+\title{Generate quick map of specified contiguities}
 \usage{
 quickmap_contigs(cont, data, unit)
 }
@@ -17,5 +17,5 @@ quickmap_contigs(cont, data, unit)
 A map for visualising and checking of contiguities
 }
 \description{
-Generates quick map of specified contiguities
+Generate quick map of specified contiguities
 }

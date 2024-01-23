@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_estimates.R
 \name{tidy_estimates}
 \alias{tidy_estimates}
-\title{Gathers estimates from mgcv model with random effects and/or mrf in tidy format}
+\title{Gather estimates from mgcv model with random effects and/or mrf in tidy format}
 \usage{
 tidy_estimates(model, dataframe)
 }
@@ -15,5 +15,5 @@ tidy_estimates(model, dataframe)
 `sf` dataframe with the smooth and fixed outputs of the model as the initial columns
 }
 \description{
-Gathers estimates from mgcv model with random effects and/or mrf in tidy format
+Gather estimates from mgcv model with random effects and/or mrf in tidy format
 }

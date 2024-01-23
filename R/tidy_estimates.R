@@ -1,4 +1,4 @@
-#' Gathers estimates from mgcv model with random effects and/or mrf in tidy format
+#' Gather estimates from mgcv model with random effects and/or mrf in tidy format
 #'
 #' @param model The output of an `mgcv::gam()` model
 #' @param dataframe `sf` dataframe to which the output will be attached

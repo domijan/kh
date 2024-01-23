@@ -2,7 +2,7 @@
 % Please edit documentation in R/quickmap.R
 \name{quickmap}
 \alias{quickmap}
-\title{Generates quick maps of random and mrf effects from mgcv models}
+\title{Generate quick maps of random and mrf effects from mgcv models}
 \usage{
 quickmap(output)
 }
@@ -13,5 +13,5 @@ quickmap(output)
 a list containing quick maps of all smooths
 }
 \description{
-Generates quick maps of random and mrf effects from mgcv models
+Generate quick maps of random and mrf effects from mgcv models
 }
