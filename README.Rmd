@@ -27,7 +27,7 @@ It aims to do this with a collection of pre- and post-processing tools.
 
 Two packages which are commonly used to fit such models are `mgcv` and `brms`.
 
-1.  This package has *pre-processing tools* which take an `sf` spatial object and generate a contiguity structure in the form which is required by the modelling package.
+  1. This package has *pre-processing tools* which take an `sf` spatial object and generate a contiguity structure in the form which is required by the modelling package.
 
 | Function                | Stage      | Purpose                                                                                                              |
 |------------------|------------------|-----------------------------------|
@@ -39,8 +39,9 @@ Two packages which are commonly used to fit such models are `mgcv` and `brms`.
 | manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
 | manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
-2.  The model can then be fit as normal within `mgcv` or `brms`.
-3.  The *post-processing tools* then extract the results of the model into a tidy `sf` format so they can easily be mapped.
+  2. The model can then be fit as normal within `mgcv` or `brms`.
+
+  3. The *post-processing tools* then extract the results of the model into a tidy `sf` format so they can easily be mapped.
 
 | Function     | Purpose               |
 |--------------|-----------------------|

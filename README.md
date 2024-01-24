@@ -28,6 +28,7 @@ Two packages which are commonly used to fit such models are `mgcv` and
 | manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
 1.  The model can then be fit as normal within `mgcv` or `brms`.
+
 2.  The *post-processing tools* then extract the results of the model
     into a tidy `sf` format so they can easily be mapped.
 
