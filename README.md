@@ -71,7 +71,7 @@ if (any(installed_packages == FALSE)) {
 invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
 ```
 
-## Example
+## Functions
 
 Often when preparing areal spatial data, the presence of uncontiguous
 areas (such as islands or exclaves) can create difficulties. We might
@@ -80,7 +80,7 @@ tunnels etc. to render two uncontiguous areas as neighbours. These
 *pre-processing* functions help to make the process of generating
 neighbourhood structures less complicated.
 
-### Pre-processing functions
+### Use of pre-processing functions
 
 The following set of functions are useful for preparing a neighbourhood
 structure from an `sf` object for use with `mgcv`. They suggest three
@@ -272,10 +272,6 @@ temp[1:10,1:10]
 #> East Timor     0    0    0    0    0    0    0    0    0     0
 ```
 
-## Modelling example from UK
-
-### Use of pre-processing functions
-
 Applied to the situation of modelling voting behaviour in the UK, we can
 set up contiguities according to administrative level.
 
@@ -307,7 +303,7 @@ uk_admins <- elect_results |>
   st_as_sf()
 ```
 
-For regions, counties and constituencies:
+Contiguities as set up for regions, counties and constituencies:
 
 ``` r
 
@@ -335,6 +331,8 @@ widths = c(1,2,3)
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 ### Use of checking/editing functions
+
+We are going to use constituency-level contiguities for this example.
 
 We might want to alter the contiguities based on some subject-matter
 knowledge. Perhaps some islands are more closely linked to some mainland
@@ -434,6 +432,11 @@ The function `tidy_estimates` takes a fitted `mgcv::gam` model and
 returns computed estimates and standard errors for any random effects
 and/or Markov random field spatial smoothing components, attached to an
 appropriate (spatial) dataframe.
+
+## Modelling example from UK
+
+All of these functions are used in the worked example below, applied to
+voting behaviour in the UK.
 
 First use the pre-functions:
 
