@@ -53,7 +53,16 @@ You can install the development version of `kh` from
 devtools::install_github("horankev/kh")
 ```
 
-For this example, we load some spatial data from these sources:
+## Functions
+
+Often when preparing areal spatial data, the presence of uncontiguous
+areas (such as islands or exclaves) can create difficulties. We might
+also want to account for some hidden contiguities by allowing bridges,
+tunnels etc. to render two uncontiguous areas as neighbours. These
+*pre-processing* functions help to make the process of generating
+neighbourhood structures less complicated.
+
+To demonstrate, we load some spatial data from the following sources:
 
 ``` r
 # required packages
@@ -74,16 +83,9 @@ if (any(installed_packages == FALSE)) {
 
 # Packages loading
 invisible(lapply(packages, library, character.only = TRUE, quietly = TRUE))
+
+library(kh)
 ```
-
-## Functions
-
-Often when preparing areal spatial data, the presence of uncontiguous
-areas (such as islands or exclaves) can create difficulties. We might
-also want to account for some hidden contiguities by allowing bridges,
-tunnels etc. to render two uncontiguous areas as neighbours. These
-*pre-processing* functions help to make the process of generating
-neighbourhood structures less complicated.
 
 ### Use of pre-processing functions
 
@@ -104,13 +106,9 @@ further manual *editing* can then be used until it looks as it should.
 | manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
 | manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
-``` r
-library(kh)
-```
+##### make_contigs()
 
-#### make_contigs()
-
-#### quickmap_contigs()
+##### quickmap_contigs()
 
 The following is a map of Indonesia from the `rnaturalearth` package. It
 features many non-contiguous units. In the following example of
@@ -134,7 +132,7 @@ indonesia_cont <- make_contigs(data = indonesia,
   quickmap_contigs(indonesia, id)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Rather than operating at the individual island level, this can be done
 at a higher provincial level by changing an argument in the function.
@@ -150,7 +148,7 @@ indonesia_cont <- make_contigs(data = indonesia,
   quickmap_contigs(indonesia, name)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 If we wish to use `mgcv`, we get a neighbourhood list:
 
@@ -217,7 +215,7 @@ asia_cont <- make_contigs(data = asia,
   quickmap_contigs(asia, admin)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 ``` r
 make_contigs(data = asia,
@@ -323,7 +321,7 @@ ggarrange(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 ### Use of checking/editing functions
 
@@ -334,13 +332,13 @@ areas than to others due to, for example, a ferry service.
 The following functions allow constituencies to be manually paired or
 unpaired as necessary.
 
-#### manual_link_name()
+##### manual_link_name()
 
-#### manual_unlink_name()
+##### manual_unlink_name()
 
-#### manual_link_numeric()
+##### manual_link_numeric()
 
-#### manual_unlink_numeric()
+##### manual_unlink_numeric()
 
 We can use `manual_link_name` to add additional contiguities using the
 name of the units. This can also be done using the number of the unit
@@ -355,7 +353,7 @@ make_contigs(data = uk_admins,
   quickmap_contigs(uk_admins, county)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 or `manual_unlink_name` to unlink units using their names. Here, we
 unlink the East and West Midlands, and also the North West and North
@@ -370,7 +368,7 @@ make_contigs(data = uk_admins,
   quickmap_contigs(uk_admins, region)
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
 
 In the following example, we link island constituencies to their nearest
 3 constituencies:
@@ -382,7 +380,7 @@ uk_admins |>
   quickmap_contigs(uk_admins, constituency)
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 #### find_neighbours()
 
@@ -473,7 +471,7 @@ model <- gam(con_17 ~
 
 Then use the post-functions to generate output:
 
-#### tidy_estimates()
+##### tidy_estimates()
 
 ``` r
 output <- tidy_estimates(model, df_england) # get estimates from `model` attached to `df_england`
@@ -527,7 +525,7 @@ head(output[,1:10])
 #> 6                              0.03458959 MULTIPOLYGON (((449576.1 36...
 ```
 
-#### quickmap()
+##### quickmap()
 
 A list containing plots (maps, as they are spatial) of the components
 can be generated with this function:
@@ -540,4 +538,4 @@ ggarrange(plotlist = plot_list,    # ggarrange() can control layout of a list of
           nrow = 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="100%" />
