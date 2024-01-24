@@ -332,8 +332,6 @@ widths = c(1,2,3)
 
 ### Use of checking/editing functions
 
-We are going to use constituency-level contiguities for this example.
-
 We might want to alter the contiguities based on some subject-matter
 knowledge. Perhaps some islands are more closely linked to some mainland
 areas than to others due to, for example, a ferry service.
@@ -435,8 +433,10 @@ appropriate (spatial) dataframe.
 
 ## Modelling example from UK
 
-All of these functions are used in the worked example below, applied to
-voting behaviour in the UK.
+The functions mentioned above are used together and in sequence in the
+following worked example, which examines voting behaviour in the UK
+using a multilevel modelling stucture with an ICAR component at the
+lowest level.
 
 First use the pre-functions:
 
@@ -444,16 +444,14 @@ First use the pre-functions:
 
 nb_england <- uk_admins |> 
   filter(country %in% "England") |> 
-  make_contigs(unit = constituency,
-                    link_islands_k = 3) |> 
-  manual_unlink_name("Isle Of Wight","New Forest East") |> 
-  manual_unlink_name("Isle Of Wight","New Forest West")
+  make_contigs(unit = constituency,                        # make contiguities at this level
+                    link_islands_k = 3) |>                 # link islands to their three closest neighbours
+  manual_unlink_name("Isle Of Wight","New Forest East") |> # due to local knowledge, we don't want this connection
+  manual_unlink_name("Isle Of Wight","New Forest West")    # and we don't want this connection
   
 df_england <- uk_admins |> 
-  filter(country %in% "England") |> 
-  mutate(constituency = factor(constituency),
-         region = factor(region),
-         county = factor(county))
+  filter(country %in% "England") |>                        # let's just focus on England
+  mutate(constituency = factor(constituency))              # `mgcv` requires the ICAR level as a factor
 ```
 
 Then fit a `gam` model with a combination of random effects and ICAR
@@ -479,7 +477,7 @@ Then use the post-functions to generate output:
 
 ``` r
 
-output <- tidy_estimates(model, df_england)
+output <- tidy_estimates(model, df_england) # get estimate from this model attached to dataframe df_england
 ```
 
 The output shown below displays the estimates and standard errors of
@@ -538,8 +536,8 @@ can be generated with this function:
 
 ``` r
 
-plot_list <- quickmap(output)
-ggarrange(plotlist = plot_list, 
+plot_list <- quickmap(output)      # function to turn the above output into a list of quick maps
+ggarrange(plotlist = plot_list,    # ggarrange can plot a list of plots with control over layout
           legend = "none",
           ncol = 3,
           nrow = 2)
