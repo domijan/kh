@@ -30,7 +30,7 @@ Two packages which are commonly used to fit such models are `mgcv` and `brms`.
 **1. Pre-processing tools:** This package has functions which take an `sf` spatial object and generate a contiguity structure in the form which is required by the modelling package.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|------------------|------------------|-----------------------------------|
+|-------------------|-------------------|----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit's neighbours within the contiguity object                                              |
@@ -43,10 +43,10 @@ Two packages which are commonly used to fit such models are `mgcv` and `brms`.
 
 **3. Post-processing tools:** These can then extract the results of the model into a tidy `sf` format so they can easily be mapped.
 
-| Function     | Purpose               |
-|--------------|-----------------------|
+| Function         | Purpose               |
+|------------------|-----------------------|
 | tidy_estimates() | **TIDY RESULTS**      |
-| quickmap()   | **VISUALISE RESULTS** |
+| quickmap()       | **VISUALISE RESULTS** |
 
 ## Installation
 
@@ -90,7 +90,7 @@ Often when preparing areal spatial data, the presence of uncontiguous areas (suc
 The following set of functions are useful for preparing a neighbourhood structure from an `sf` object for use with `mgcv`. They suggest three stages in this process: *creation*, *checking* and *editing*. The second and third can be looped as necessary. First *create* a contiguity list, then *check* a map of it to see if it looks appropriate. Functions for further manual *editing* can then be used until it looks as it should.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|------------------|------------------|-----------------------------------|
+|-------------------|-------------------|----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit's neighbours within the contiguity object                                              |
@@ -257,7 +257,7 @@ widths = c(1,2,3)
 
 We might want to alter the contiguities based on some subject-matter knowledge. Perhaps some islands are more closely linked to some mainland areas than to others due to, for example, a ferry service.
 
-The following functions allow constituencies to be manually paired or unpaired as necessary. 
+The following functions allow constituencies to be manually paired or unpaired as necessary.
 
 #### manual_link_name()
 
@@ -331,10 +331,10 @@ uk_admins |>
 
 ### Use of post-processing functions
 
-| Function     | Purpose               |
-|--------------|-----------------------|
+| Function         | Purpose               |
+|------------------|-----------------------|
 | tidy_estimates() | **TIDY RESULTS**      |
-| quickmap()   | **VISUALISE RESULTS** |
+| quickmap()       | **VISUALISE RESULTS** |
 
 The function `tidy_estimates` takes a fitted `mgcv::gam` model and returns computed estimates and standard errors for any random effects and/or Markov random field spatial smoothing components, attached to an appropriate (spatial) dataframe.
 
@@ -359,7 +359,19 @@ df_england <- uk_admins |>
 
 ```
 
-Then fit a `gam` model with a combination of random effects and ICAR components:
+Then fit a `gam` model with a combination of random effects and ICAR components. This particular model has:
+
+-   fixed intercept,
+
+-   three fixed slopes (*born_england*, *deprived_1* and *degree*),
+
+-   random intercepts at *region* and *county* levels,
+
+-   random slope at *county* level for *degree*,
+
+-   ICAR varying intercept at *constituency* level, and
+
+-   ICAR varying slopes at *constituency* level for *born_england*.
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -382,7 +394,7 @@ Then use the post-functions to generate output:
 
 ```{r, warning=FALSE, message=FALSE}
 
-output <- tidy_estimates(model, df_england) # get estimate from this model attached to dataframe df_england
+output <- tidy_estimates(model, df_england) # get estimates from `model` attached to `df_england`
 
 ```
 

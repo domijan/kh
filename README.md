@@ -18,7 +18,7 @@ Two packages which are commonly used to fit such models are `mgcv` and
 which is required by the modelling package.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|-------------------|-------------------|-----------------------------------|
+|-------------------|-------------------|----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
@@ -90,7 +90,7 @@ then *check* a map of it to see if it looks appropriate. Functions for
 further manual *editing* can then be used until it looks as it should.
 
 | Function                | Stage      | Purpose                                                                                                              |
-|-------------------|-------------------|-----------------------------------|
+|-------------------|-------------------|----------------------------------|
 | make_contigs()          | **CREATE** | generates a contiguity object, by any chosen level, with the option of joining islands to their nearest k neighbours |
 | quickmap_contigs()      | **CHECK**  | generates a quick-reference contiguity map of a contiguity object                                                    |
 | find_neighbours()       | **EDIT**   | outputs the names of any unit’s neighbours within the contiguity object                                              |
@@ -455,7 +455,19 @@ df_england <- uk_admins |>
 ```
 
 Then fit a `gam` model with a combination of random effects and ICAR
-components:
+components. This particular model has:
+
+-   fixed intercept,
+
+-   three fixed slopes (*born_england*, *deprived_1* and *degree*),
+
+-   random intercepts at *region* and *county* levels,
+
+-   random slope at *county* level for *degree*,
+
+-   ICAR varying intercept at *constituency* level, and
+
+-   ICAR varying slopes at *constituency* level for *born_england*.
 
 ``` r
 
@@ -477,7 +489,7 @@ Then use the post-functions to generate output:
 
 ``` r
 
-output <- tidy_estimates(model, df_england) # get estimate from this model attached to dataframe df_england
+output <- tidy_estimates(model, df_england) # get estimates from `model` attached to `df_england`
 ```
 
 The output shown below displays the estimates and standard errors of
