@@ -108,7 +108,7 @@ library(kh)
 
 #### quickmap_contigs()
 
-The following is a map of the UK from the `rnaturalearth` package. It
+The following is a map of Indonesia from the `rnaturalearth` package. It
 features many non-contiguous units. In the following example of
 `make_contigs`, the argument k is set to one. This means that in
 addition to all of the normal contiguities, all islands will be joined
@@ -126,7 +126,7 @@ indonesia <- ne_states(country="indonesia", returnclass = "sf") |>
 indonesia$id <-1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = id,
-                               link_islands_k = 2, 
+                               link_islands_k = 1, 
                                modelling.package = "brms") |> 
   quickmap_contigs(indonesia, id)
 ```
@@ -134,7 +134,7 @@ indonesia_cont <- make_contigs(data = indonesia,
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Rather than operating at the individual island level, this can be done
-at a higher level by changing an argument in the function.
+at a higher provincial level by changing an argument in the function.
 
 ``` r
 
@@ -206,8 +206,8 @@ temp[1:10,1:10]
 #> Jawa Tengah        0    0    0    0    0    0    0    0    1     0
 ```
 
-This could be changed to join each island to the two closest units as in
-this example with the countries of Asia.
+The k value could be changed to 2 to join each island to the two closest
+units as in this example with the countries of Asia.
 
 ``` r
 
@@ -272,6 +272,10 @@ temp[1:10,1:10]
 #> East Timor     0    0    0    0    0    0    0    0    0     0
 ```
 
+## Modelling example from UK
+
+### Use of pre-processing functions
+
 Applied to the situation of modelling voting behaviour in the UK, we can
 set up contiguities according to administrative level.
 
@@ -329,6 +333,15 @@ widths = c(1,2,3)
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+
+### Use of checking/editing functions
+
+We might want to alter the contiguities based on some subject-matter
+knowledge. Perhaps some islands are more closely linked to some mainland
+areas than to others due to, for example, a ferry service.
+
+The following functions allow constituencies to be manually paired or
+unpaired as necessary.
 
 #### manual_link_name()
 
@@ -410,7 +423,7 @@ uk_admins |>
 #> [1] "Gosport"
 ```
 
-### Post-processing functions
+### Use of post-processing functions
 
 | Function         | Purpose               |
 |------------------|-----------------------|
