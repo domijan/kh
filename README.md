@@ -13,9 +13,11 @@ It aims to do this with a collection of pre- and post-processing tools.
 Two packages which are commonly used to fit such models are `mgcv` and
 `brms`.
 
-**1. Pre-processing tools:** This package has functions which take an
-`sf` spatial object and generate a contiguity structure in the form
-which is required by the modelling package.
+## 1. Pre-processing tools
+
+This package has functions which take an `sf` spatial object and
+generate a contiguity structure in the form which is required by the
+modelling package.
 
 | Function                | Stage      | Purpose                                                                                                              |
 |-------------------|-------------------|----------------------------------|
@@ -27,11 +29,14 @@ which is required by the modelling package.
 | manual_link_numeric()   | **EDIT**   | link two units (by index number) as neighbours which are not already neighbours                                      |
 | manual_unlink_numeric() | **EDIT**   | unlink two units (by index number) which are currently neighbours                                                    |
 
-**2. Fit the model:** The model can then be fit as normal within `mgcv`
-or `brms`.
+## 2. Fit the model
 
-**3. Post-processing tools:** These can then extract the results of the
-model into a tidy `sf` format so they can easily be mapped.
+The model can then be fit as normal within `mgcv` or `brms`.
+
+## 3. Post-processing tools
+
+These can then extract the results of the model into a tidy `sf` format
+so they can easily be mapped.
 
 | Function         | Purpose               |
 |------------------|-----------------------|
@@ -101,7 +106,6 @@ further manual *editing* can then be used until it looks as it should.
 
 ``` r
 library(kh)
-## basic example code
 ```
 
 #### make_contigs()
@@ -120,10 +124,9 @@ For a country with many islands such as Indonesia, we can compute
 contiguities by individual island:
 
 ``` r
-
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
+indonesia$id <- 1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = id,
                                link_islands_k = 1, 
@@ -131,16 +134,15 @@ indonesia_cont <- make_contigs(data = indonesia,
   quickmap_contigs(indonesia, id)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Rather than operating at the individual island level, this can be done
 at a higher provincial level by changing an argument in the function.
 
 ``` r
-
 indonesia <- ne_states(country="indonesia", returnclass = "sf") |> 
   st_cast("POLYGON")
-indonesia$id <-1:nrow(indonesia)
+indonesia$id <- 1:nrow(indonesia)
 indonesia_cont <- make_contigs(data = indonesia,
                                unit = name,
                                link_islands_k = 2,
@@ -148,12 +150,11 @@ indonesia_cont <- make_contigs(data = indonesia,
   quickmap_contigs(indonesia, name)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 If we wish to use `mgcv`, we get a neighbourhood list:
 
 ``` r
-
 make_contigs(data = indonesia,
              unit = name,
              link_islands_k = 2,
@@ -187,7 +188,6 @@ make_contigs(data = indonesia,
 Or we can get a neighbourhood matrix by selecting `brms`:
 
 ``` r
-
 temp <- make_contigs(data = indonesia,
                      unit = name,
                      link_islands_k = 2,
@@ -210,7 +210,6 @@ The k value could be changed to 2 to join each island to the two closest
 units as in this example with the countries of Asia.
 
 ``` r
-
 asia <- ne_countries(continent="asia", returnclass = "sf")
 asia_cont <- make_contigs(data = asia,
                     unit = admin,
@@ -218,10 +217,9 @@ asia_cont <- make_contigs(data = asia,
   quickmap_contigs(asia, admin)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 ``` r
-
 make_contigs(data = asia,
              unit = admin,
              link_islands_k = 2,
@@ -253,7 +251,6 @@ make_contigs(data = asia,
 ```
 
 ``` r
-
 temp <- make_contigs(data = asia,
                      unit = admin,
                      link_islands_k = 2,
@@ -276,7 +273,6 @@ Applied to the situation of modelling voting behaviour in the UK, we can
 set up contiguities according to administrative level.
 
 ``` r
-
 # prepare the data
 # extract and join census and election data from parlitools package
 census_11 <- parlitools::census_11 |> 
@@ -306,29 +302,28 @@ uk_admins <- elect_results |>
 Contiguities as set up for regions, counties and constituencies:
 
 ``` r
-
 ggarrange(
-uk_admins |> 
-  make_contigs(unit = region,
-                    link_islands_k = 1) |> 
-  quickmap_contigs(uk_admins, region),
-
-uk_admins |> 
-  make_contigs(unit = county,
-                    link_islands_k = 1) |> 
-  quickmap_contigs(uk_admins, county),
-
-uk_admins |> 
-  make_contigs(unit = constituency,
-                    link_islands_k = 1) |> 
-  quickmap_contigs(uk_admins, constituency),
-
-ncol=3,
-widths = c(1,2,3)
+  uk_admins |> 
+    make_contigs(unit = region,
+                 link_islands_k = 1) |> 
+    quickmap_contigs(uk_admins, region),
+  
+  uk_admins |> 
+    make_contigs(unit = county,
+                 link_islands_k = 1) |> 
+    quickmap_contigs(uk_admins, county),
+  
+  uk_admins |> 
+    make_contigs(unit = constituency,
+                 link_islands_k = 1) |> 
+    quickmap_contigs(uk_admins, constituency),
+  
+  ncol=3,
+  widths = c(1,2,3)
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 ### Use of checking/editing functions
 
@@ -353,44 +348,41 @@ name of the units. This can also be done using the number of the unit
 using `manual_link_numeric`. Here we link Northern Ireland to Cornwall:
 
 ``` r
-
 make_contigs(data = uk_admins,
-                    unit = county,
-                    link_islands_k = 1) |> 
+             unit = county,
+             link_islands_k = 1) |> 
   manual_link_name("Northern Ireland","Cornwall") |> 
   quickmap_contigs(uk_admins, county)
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
 
 or `manual_unlink_name` to unlink units using their names. Here, we
 unlink the East and West Midlands, and also the North West and North
 East:
 
 ``` r
-
 make_contigs(data = uk_admins,
-                    unit = region,
-                    link_islands_k = 1) |> 
+             unit = region,
+             link_islands_k = 1) |> 
   manual_unlink_name("East Midlands","West Midlands") |> 
   manual_unlink_name("North West","North East") |> 
   quickmap_contigs(uk_admins, region)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 In the following example, we link island constituencies to their nearest
 3 constituencies:
 
 ``` r
-
 uk_admins |> 
   make_contigs(unit = constituency,
-                    link_islands_k = 3) |> 
+               link_islands_k = 3) |> 
   quickmap_contigs(uk_admins, constituency)
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
 #### find_neighbours()
 
@@ -398,10 +390,9 @@ But which three constituencies have now been link to the Isle of Wight?
 Using the `find_neighbours` function…
 
 ``` r
-
 uk_admins |> 
   make_contigs(unit = constituency,
-                      link_islands_k = 3) |> 
+               link_islands_k = 3) |> 
   find_neighbours("Isle Of Wight")
 #> [1] "Gosport"         "New Forest East" "New Forest West"
 ```
@@ -409,10 +400,9 @@ uk_admins |>
 I only wanted Gosport. So I will remove the other two…
 
 ``` r
-
 uk_admins |> 
   make_contigs(unit = constituency,
-                      link_islands_k = 3) |> 
+               link_islands_k = 3) |> 
   manual_unlink_name("Isle Of Wight","New Forest East") |> 
   manual_unlink_name("Isle Of Wight","New Forest West") |> 
   find_neighbours("Isle Of Wight")
@@ -441,14 +431,13 @@ lowest level.
 First use the pre-functions:
 
 ``` r
-
 nb_england <- uk_admins |> 
   filter(country %in% "England") |> 
   make_contigs(unit = constituency,                        # make contiguities at this level
-                    link_islands_k = 3) |>                 # link islands to their three closest neighbours
+               link_islands_k = 3) |>                      # link islands to their three closest neighbours
   manual_unlink_name("Isle Of Wight","New Forest East") |> # due to local knowledge, we don't want this connection
   manual_unlink_name("Isle Of Wight","New Forest West")    # and we don't want this connection
-  
+
 df_england <- uk_admins |> 
   filter(country %in% "England") |>                        # let's just focus on England
   mutate(constituency = factor(constituency))              # `mgcv` requires the ICAR level as a factor
@@ -470,7 +459,6 @@ components. This particular model has:
 -   ICAR varying slopes at *constituency* level for *born_england*.
 
 ``` r
-
 model <- gam(con_17 ~ 
                born_england + 
                deprived_1 +
@@ -488,16 +476,14 @@ Then use the post-functions to generate output:
 #### tidy_estimates()
 
 ``` r
-
 output <- tidy_estimates(model, df_england) # get estimates from `model` attached to `df_england`
 ```
 
 The output shown below displays the estimates and standard errors of
-each component of the model for the first 5 constituencies
+each varying component of the model for the first 5 constituencies
 alphabetically, as an `sf` dataframe which can be easily mapped:
 
 ``` r
-
 head(output[,1:10])
 #> Simple feature collection with 6 features and 10 fields
 #> Geometry type: MULTIPOLYGON
@@ -547,12 +533,11 @@ A list containing plots (maps, as they are spatial) of the components
 can be generated with this function:
 
 ``` r
-
 plot_list <- quickmap(output)      # function to turn the above output into a list of quick maps
-ggarrange(plotlist = plot_list,    # ggarrange can plot a list of plots with control over layout
+ggarrange(plotlist = plot_list,    # ggarrange() can control layout of a list of plots
           legend = "none",
           ncol = 3,
           nrow = 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-21-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="100%" />
